@@ -6,7 +6,7 @@ import NavItem from 'react-bootstrap/lib/NavItem'
 class Navbar extends Component{
   render() {
     const {title} = this.props
-    const {links} = this.props    
+    const {categories} = this.props
 
     return (
         <BNavbar inverse collapseOnSelect fixedTop>
@@ -18,9 +18,9 @@ class Navbar extends Component{
           </BNavbar.Header>
           <BNavbar.Collapse>
             <Nav>
-            {links.map((link) => (
-                <NavItem eventKey={1} href="#" key={link}>
-                  {link}
+            {categories.map((category) => (
+                <NavItem eventKey={1} href={'/'+category.link} key={category.link}>
+                  {category.name}
                 </NavItem>
               ))}
             </Nav>

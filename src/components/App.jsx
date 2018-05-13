@@ -1,19 +1,38 @@
 import React, { Component } from 'react'
 import Navbar from './Navbar'
 import ListView from './ListView'
+import { Route } from 'react-router-dom'
 
 class App extends Component {
   render() {
-    const links = ['Trending','Popular','Not so popular','Good stuff']
+    const categories = [
+        {
+          name: 'react',
+          path: 'react'
+        },
+        {
+          name: 'redux',
+          path: 'redux'
+        },
+        {
+          name: 'udacity',
+          path: 'udacity'
+        }
+    ]
+
     return (
       <div>
-        <Navbar title="Readable" links={links} />
+        <Navbar title="Readable" categories={categories} />
         <br />
         <br />
         <br />
         <br />
         <div className="container">
-          <ListView category="Trending"/>
+          {categories.map((category) => (
+            <Route exact path={'/'+category.path.toString().toLowerCase()} render={() => (
+                <ListView category={category.name} />
+            )}/>
+          ))}
         </div>
       </div>
     )
