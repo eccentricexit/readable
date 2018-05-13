@@ -45,7 +45,7 @@ class ListView extends Component {
     ]
 
     return (
-      <div className="container">
+      <div>
         <h2>{category}</h2>
         <br/>
         <ListGroup>
