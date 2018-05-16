@@ -33,6 +33,9 @@ class App extends Component {
                 <ListView category={category.name} />
             )}/>
           ))}
+          <Route exact path="/" render={() => (
+              <ListView category="All" />
+          )}/>
         </div>
       </div>
     )

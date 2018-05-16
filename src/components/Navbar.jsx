@@ -12,7 +12,7 @@ class Navbar extends Component{
         <BNavbar inverse collapseOnSelect fixedTop>
           <BNavbar.Header>
             <BNavbar.Brand>
-              <a href="#brand">{title}</a>
+              <a href="/">{title}</a>
             </BNavbar.Brand>
             <BNavbar.Toggle />
           </BNavbar.Header>
