@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-import Navbar from './Navbar'
-import ListView from './ListView'
 import { Route } from 'react-router-dom'
+import ListView from './ListView'
+import Navbar from './Navbar'
+import '../App.css'
 
 class App extends Component {
   render() {
@@ -23,13 +24,13 @@ class App extends Component {
     return (
       <div>
         <Navbar title="Readable" categories={categories} />
-        <br />
-        <br />
-        <br />
-        <br />
         <div className="container">
           {categories.map((category) => (
-            <Route exact path={'/'+category.path.toString().toLowerCase()} render={() => (
+            <Route
+              exact
+              path={'/'+category.path.toString().toLowerCase()}
+              key={category.path}
+              render={() => (
                 <ListView category={category.name} />
             )}/>
           ))}
