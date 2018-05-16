@@ -19,7 +19,7 @@ class Navbar extends Component{
           <BNavbar.Collapse>
             <Nav>
             {categories.map((category) => (
-                <NavItem eventKey={1} href={'/'+category.link} key={category.link}>
+                <NavItem eventKey={category.name} href={'/'+category.path} key={category.path}>
                   {category.name}
                 </NavItem>
               ))}
