@@ -2,19 +2,29 @@ import React, { Component } from 'react'
 import ListGroup from 'react-bootstrap/lib/ListGroup'
 import ListGroupItem from 'react-bootstrap/lib/ListGroupItem'
 import Button from 'react-bootstrap/lib/Button'
-import Modal from 'react-modal'
 import ListItem from './ListItem'
+import PostModal from './PostModal'
 
 class ListView extends Component {
+
   state = {
     newPostModalOpen:false
   }
 
-  openNewPostModal = () => this.setState(() => ({ newPostModalOpen: true }))
-  closeNewPostModal = () => this.setState(() => ({ newPostModalOpen: false }))
+  openNewPostModal = () => {
+    console.log('test')
+    this.setState({
+      newPostModalOpen: true
+    })
+  }
+
+  closeNewPostModal = () => {
+    this.setState({
+      newPostModalOpen: false
+    })
+  }
 
   render() {
-    const {newPostModalOpen} = this.state
     const {category} = this.props
     const posts = [
       {
@@ -56,13 +66,11 @@ class ListView extends Component {
 
     return (
       <div>
-        <h2>{category}</h2>
-        <br/>
+        {category!=='All' && <h2>{category}</h2>}
         <Button bsStyle="primary" onClick={this.openNewPostModal}>
           Add New...
         </Button>
-        <br />
-        <br />
+        <hr />
         <ListGroup>
           {posts.map((post) => (
             <ListGroupItem key={post.id}>
@@ -71,15 +79,11 @@ class ListView extends Component {
           ))}
         </ListGroup>
 
-        <Modal
-          className='modal'
-          overlayClassName='overlay'
-          isOpen={newPostModalOpen}
-          onRequestClose={this.closeNewPostModal}
-          contentLabel='Modal'
-        >
-        <p>asdfasdfasdfad</p>
-        </Modal>
+        <PostModal
+          openClick={this.openNewPostModal}
+          closeClick={this.closeNewPostModal}
+          isOpen={this.state.newPostModalOpen}/>
+
       </div>
     )
   }
