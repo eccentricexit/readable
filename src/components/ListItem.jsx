@@ -4,8 +4,10 @@ import Media from 'react-bootstrap/lib/Media'
 import Label from 'react-bootstrap/lib/Label'
 
 class ListItem extends Component {
+
   render() {
-    const {post} = this.props
+    const {post,onEditClick} = this.props    
+
     return (
       <div>
         <Media>
@@ -20,6 +22,7 @@ class ListItem extends Component {
           <Media.Right>
             <Button
               className="glyphicon glyphicon-pencil"
+              onClick={() => {onEditClick(post)}}
               bsSize="small" />
           </Media.Right>
           <Media.Right>
