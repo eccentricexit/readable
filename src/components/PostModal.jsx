@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
-import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger'
 import Modal from 'react-bootstrap/lib/Modal'
-import Loading from 'react-loading'
 import Button from 'react-bootstrap/lib/Button'
 import Form from 'react-bootstrap/lib/Form'
 import FormGroup from 'react-bootstrap/lib/FormGroup'
@@ -30,8 +28,7 @@ class PostModal extends Component {
 
   render() {
     const {
-      isOpen,
-      openClick,
+      isOpen,      
       closeClick,
       onPublishClick,
       post

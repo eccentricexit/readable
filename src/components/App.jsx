@@ -1,46 +1,41 @@
 import React, { Component } from 'react'
+import { getCategories, getPosts } from '../utils/api'
+import { addPosts, addCategories } from '../actions'
 import { Route } from 'react-router-dom'
+import { connect } from 'react-redux';
 import ListView from './ListView'
 import Navbar from './Navbar'
-import { connect } from 'react-redux';
-import { getCategories, getPosts } from '../utils/api'
 import '../App.css'
 
 class App extends Component {
-
   state = {
-    loadingPosts:false,
-    loadingCategories: false,
-    posts:[],
-    categories: []
+    loadingPosts:false
   }
 
   componentDidMount(){
+    const {addAllCategories,addAllPosts} = this.props
+
     this.setState({
-      loadingCategories: true,
       loadingPosts:true
     })
 
     getCategories().then((categories) => {
-      this.setState({
-        categories,
-        loadingCategories:false,
-      })
+      addAllCategories(categories)
     })
 
-    getPosts().then((posts) => this.setState(()=>({
-      posts,
-      loadingPosts:false,
-    })))
+    getPosts().then((posts) => {      
+      addAllPosts(posts)
+      this.setState({
+        loadingPosts: false
+      })
+    })
   }
 
   render() {
-    const {
-      loadingPosts,
-      loadingCategories,
-      categories,
-      posts
-    } = this.state
+    const { loadingPosts } = this.state
+    const { posts, categories} = this.props
+
+    console.log('categories',categories)
 
     return (
       <div>
@@ -69,4 +64,18 @@ class App extends Component {
   }
 }
 
-export default App
+function mapStateToProps ({ categories, posts }) {
+  return { categories, posts }
+}
+
+function mapDispatchToProps (dispatch) {
+  return {
+    addAllCategories: (data) => dispatch(addCategories(data)),
+    addAllPosts: (data) => dispatch(addPosts(data))
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App)

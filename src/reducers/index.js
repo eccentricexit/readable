@@ -1,5 +1,7 @@
 import { combineReducers } from 'redux';
 import {
+  ADD_CATEGORIES,
+  ADD_POSTS,
   ADD_POST,
   EDIT_POST,
   REMOVE_POST,
@@ -8,10 +10,25 @@ import {
   REMOVE_COMMENT
 } from '../actions'
 
-const initialPostState = {}
-
-function posts (state = initialPostState, action) {
+function categories (state = [], action) {
   switch (action.type) {
+    case ADD_CATEGORIES:
+      const {categories} = action
+      let newState = state.map(a => ({...a}));
+      categories.map((category) => {newState.push(category)})
+      return newState
+    default:
+      return state
+  }
+}
+
+function posts (state = [], action) {
+  switch (action.type) {
+    case ADD_POSTS:
+      const {posts} = action
+      let newState = state.map(a => ({...a}));
+      posts.map((post) => {newState.push(post)})
+      return newState
     case ADD_POST:
       console.log('TODO: build add post action')
       return {}
@@ -26,9 +43,7 @@ function posts (state = initialPostState, action) {
   }
 }
 
-const initialCommentsState = {}
-
-function comments (state = initialCommentsState, action) {
+function comments (state = [], action) {
   switch (action.type) {
     case ADD_COMMENT :
       console.log('TODO: build add comment action')
@@ -45,6 +60,7 @@ function comments (state = initialCommentsState, action) {
 }
 
 export default combineReducers({
+  categories,
   posts,
   comments
 })
