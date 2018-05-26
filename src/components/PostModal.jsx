@@ -106,43 +106,46 @@ class PostModal extends Component {
             </Col>
           </FormGroup>
 
-          <FormGroup controlId="formHorizontalAuthor">
-            <Col componentClass={ControlLabel} sm={2}>
-              Category: {category}
-            </Col>
-            <Col sm={10}>
-              <ButtonToolbar>
-                <DropdownButton
-                  bsSize="small"
-                  title="Select..."
-                  id="dropdown-size-large"
-                >
-                  {categories.map((category) => (
-                    <MenuItem
-                      eventKey={category.name}
-                      key={category.name}
-                      onSelect={this.onCategorySelect}>
-                      {category.name}
-                    </MenuItem>
-                  ))}
-                </DropdownButton>
-              </ButtonToolbar>
-            </Col>
-          </FormGroup>
-
-          <FormGroup controlId="formHorizontalAuthor">
-            <Col componentClass={ControlLabel} sm={2}>
-              Author
-            </Col>
-            <Col sm={10}>
-              <FormControl
-                type="text"
-                placeholder="Elon Molusk"
-                defaultValue={isEditing?post.author:''}
-                onChange={(event) => this.updateAuthor(event.target.value)}
-              />
-            </Col>
-          </FormGroup>
+          {!isEditing &&
+            <FormGroup controlId="formHorizontalAuthor">
+              <Col componentClass={ControlLabel} sm={2}>
+                Category: {category}
+              </Col>
+              <Col sm={10}>
+                <ButtonToolbar>
+                  <DropdownButton
+                    bsSize="small"
+                    title="Select..."
+                    id="dropdown-size-large"
+                  >
+                    {categories.map((category) => (
+                      <MenuItem
+                        eventKey={category.name}
+                        key={category.name}
+                        onSelect={this.onCategorySelect}>
+                        {category.name}
+                      </MenuItem>
+                    ))}
+                  </DropdownButton>
+                </ButtonToolbar>
+              </Col>
+            </FormGroup>
+          }
+          {!isEditing &&
+            <FormGroup controlId="formHorizontalAuthor">
+              <Col componentClass={ControlLabel} sm={2}>
+                Author
+              </Col>
+              <Col sm={10}>
+                <FormControl
+                  type="text"
+                  placeholder="Elon Molusk"
+                  defaultValue={isEditing?post.author:''}
+                  onChange={(event) => this.updateAuthor(event.target.value)}
+                />
+              </Col>
+            </FormGroup>
+          }
 
           <FormGroup controlId="formControlsTextarea">
             <Col componentClass={ControlLabel} sm={2}>
