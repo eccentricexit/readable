@@ -38,8 +38,13 @@ function posts (state = [], action) {
         return newState
       }
     case EDIT_POST:{
-        console.log('TODO: build edit post action')
-        return {}
+        const {id,title,body} = action
+        let newState = state.map(a => ({...a}));
+        newState.filter((p) => p.id===id).map((post) => {
+          post.title = title
+          post.body = body
+        })
+        return newState
       }
     case REMOVE_POST:{
         console.log('TODO: build remove post action')

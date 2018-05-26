@@ -10,7 +10,7 @@ import Comment from './Comment'
 
 class PostDetail extends Component {
   render() {
-    const {post} = this.props
+    const { post } = this.props
     const comments = [{
       id:'asdfa',
       author: 'Beatriz Nonato',

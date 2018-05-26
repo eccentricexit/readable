@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import { addPost, editPost } from '../actions'
 import { addPost as addPostApi } from '../utils/api'
+import { updatePost as updatePostApi } from '../utils/api'
 import Modal from 'react-bootstrap/lib/Modal'
 import Button from 'react-bootstrap/lib/Button'
 import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar'
@@ -15,7 +16,7 @@ import Col from 'react-bootstrap/lib/Col'
 
 class PostModal extends Component {
   state = {
-    idPost:'',
+    id:'',
     title:'',
     author:'',
     category:'',
@@ -24,8 +25,8 @@ class PostModal extends Component {
 
   onAddClick = (e) => {
     e.preventDefault()
-    const {title,author,body,category} = this.state
-    const {publishPost,closeClick} = this.props
+    const {title, author, body, category} = this.state
+    const {publishPost, closeClick} = this.props
 
     const post = {
       id: Math.random().toString(36).substr(-8),
@@ -34,14 +35,29 @@ class PostModal extends Component {
       title,
       author,
       body
-    }    
+    }
     addPostApi(post)
     publishPost(post)
     closeClick()
   }
 
   onEditClick = (e) => {
+    e.preventDefault()
+    const {id,title,author,body,category} = this.state
+    const {updatePost,closeClick} = this.props
+    const {post} = this.props
+    const newPost = {
+      id: post.id,
+      timestamp: Date.now(),
+      category,
+      title,
+      author,
+      body
+    }
 
+    updatePostApi(newPost)
+    updatePost(newPost)
+    closeClick()
   }
 
   updateTitle(title){

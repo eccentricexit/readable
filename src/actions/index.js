@@ -35,12 +35,11 @@ export function addPost ({id,timestamp,title,category,author,body}){
   }
 }
 
-export function editPost ({postid,title,author,body}){
+export function editPost ({id,title,body}){
   return {
     type: EDIT_POST,
-    postid,
+    id,
     title,
-    author,
     body
   }
 }
