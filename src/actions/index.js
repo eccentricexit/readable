@@ -9,13 +9,6 @@ export const ADD_COMMENT = 'ADD_COMMENT'
 export const EDIT_COMMENT = 'EDIT_COMMENT'
 export const REMOVE_COMMENT = 'REMOVE_COMMENT'
 
-export function addPosts (posts){
-  return {
-    type: ADD_POSTS,
-    posts
-  }
-}
-
 export function addCategories (categories){
   return {
     type: ADD_CATEGORIES,
@@ -23,9 +16,19 @@ export function addCategories (categories){
   }
 }
 
-export function addPost ({title,author,body}){
+export function addPosts (posts){
+  return {
+    type: ADD_POSTS,
+    posts
+  }
+}
+
+export function addPost ({id,timestamp,title,category,author,body}){
   return {
     type: ADD_POST,
+    id,
+    timestamp,
+    category,
     title,
     author,
     body

@@ -23,7 +23,7 @@ class App extends Component {
       addAllCategories(categories)
     })
 
-    getPosts().then((posts) => {      
+    getPosts().then((posts) => {
       addAllPosts(posts)
       this.setState({
         loadingPosts: false
@@ -33,9 +33,7 @@ class App extends Component {
 
   render() {
     const { loadingPosts } = this.state
-    const { posts, categories} = this.props
-
-    console.log('categories',categories)
+    const { posts, categories} = this.props    
 
     return (
       <div>

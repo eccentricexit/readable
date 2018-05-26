@@ -5,7 +5,9 @@ if (!token)
   token = localStorage.token = Math.random().toString(36).substr(-8)
 
 const headers = {
-  'Authorization': token
+  'Authorization': token,
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
 }
 
 export const getCategories = () =>
@@ -15,4 +17,14 @@ export const getCategories = () =>
 
 export const getPosts = () =>
   fetch(`${api}/posts`, { headers })
-    .then(res => res.json())    
+    .then(res => res.json())
+
+export const addPost = (post) => {
+  fetch(`${api}/posts`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(post)
+  }).then(res => {
+    res.json()
+  })
+}

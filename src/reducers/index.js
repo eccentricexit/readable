@@ -15,7 +15,7 @@ function categories (state = [], action) {
     case ADD_CATEGORIES:
       const {categories} = action
       let newState = state.map(a => ({...a}));
-      categories.map((category) => {newState.push(category)})
+      categories.map(category => newState.push(category))
       return newState
     default:
       return state
@@ -24,20 +24,27 @@ function categories (state = [], action) {
 
 function posts (state = [], action) {
   switch (action.type) {
-    case ADD_POSTS:
-      const {posts} = action
-      let newState = state.map(a => ({...a}));
-      posts.map((post) => {newState.push(post)})
-      return newState
-    case ADD_POST:
-      console.log('TODO: build add post action')
-      return {}
-    case EDIT_POST:
-      console.log('TODO: build edit post action')
-      return {}
-    case REMOVE_POST:
-      console.log('TODO: build remove post action')
-      return {}
+    case ADD_POSTS:{
+        const {posts} = action
+        let newState = state.map(a => ({...a}));
+        posts.map(post => newState.push(post))
+        return newState
+      }
+    case ADD_POST:{
+        const {id,timestamp,title,category,author,body} = action
+        const post = {id,timestamp,title,category,author,body}
+        let newState = state.map(a => ({...a}));
+        newState.push(post)
+        return newState
+      }
+    case EDIT_POST:{
+        console.log('TODO: build edit post action')
+        return {}
+      }
+    case REMOVE_POST:{
+        console.log('TODO: build remove post action')
+        return {}
+      }
     default:
       return state
   }
