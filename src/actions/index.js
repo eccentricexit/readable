@@ -4,6 +4,8 @@ export const ADD_POSTS = 'ADD_POSTS'
 export const ADD_POST = 'ADD_POST'
 export const EDIT_POST = 'EDIT_POST'
 export const REMOVE_POST = 'REMOVE_POST'
+export const VOTE_UP_POST = 'VOTE_UP_POST'
+export const VOTE_DOWN_POST = 'VOTE_DOWN_POST'
 
 export const ADD_COMMENT = 'ADD_COMMENT'
 export const EDIT_COMMENT = 'EDIT_COMMENT'
@@ -41,6 +43,20 @@ export function editPost ({id,title,body}){
     id,
     title,
     body
+  }
+}
+
+export function voteUpPost(id){
+  return {
+    type: VOTE_UP_POST,
+    id
+  }
+}
+
+export function voteDownPost(id){
+  return {
+    type: VOTE_DOWN_POST,
+    id
   }
 }
 

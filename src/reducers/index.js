@@ -4,6 +4,8 @@ import {
   ADD_POSTS,
   ADD_POST,
   EDIT_POST,
+  VOTE_UP_POST,
+  VOTE_DOWN_POST,
   REMOVE_POST,
   ADD_COMMENT,
   EDIT_COMMENT,
@@ -25,31 +27,43 @@ function categories (state = [], action) {
 function posts (state = [], action) {
   switch (action.type) {
     case ADD_POSTS:{
-        const {posts} = action
-        let newState = state.map(a => ({...a}));
-        posts.map(post => newState.push(post))
-        return newState
-      }
+      const {posts} = action
+      let newState = state.map(a => ({...a}));
+      posts.map(post => newState.push(post))
+      return newState
+    }
     case ADD_POST:{
-        const {id,timestamp,title,category,author,body} = action
-        const post = {id,timestamp,title,category,author,body}
-        let newState = state.map(a => ({...a}));
-        newState.push(post)
-        return newState
-      }
+      const {id,timestamp,title,category,author,body} = action
+      const post = {id,timestamp,title,category,author,body}
+      let newState = state.map(a => ({...a}));
+      newState.push(post)
+      return newState
+    }
     case EDIT_POST:{
-        const {id,title,body} = action
-        let newState = state.map(a => ({...a}));
-        newState.filter((p) => p.id===id).map((post) => {
-          post.title = title
-          post.body = body
-        })
-        return newState
-      }
+      const {id,title,body} = action
+      let newState = state.map(a => ({...a}))
+      newState.filter((p) => p.id===id).map((post) => {
+        post.title = title
+        post.body = body
+      })
+      return newState
+    }
+    case VOTE_UP_POST:{
+      const {id} = action
+      let newState = state.map(a => ({...a}))
+      newState.filter((p)=>p.id===id).map((p)=>{p.voteScore++})
+      return newState
+    }
+    case VOTE_DOWN_POST:{
+      const {id} = action
+      let newState = state.map(a => ({...a}))
+      newState.filter((p)=>p.id===id).map((p)=>{p.voteScore--})
+      return newState
+    }
     case REMOVE_POST:{
-        console.log('TODO: build remove post action')
-        return {}
-      }
+      console.log('TODO: build remove post action')
+      return {}
+    }
     default:
       return state
   }

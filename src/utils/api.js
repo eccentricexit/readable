@@ -39,3 +39,23 @@ export const updatePost = (post) => {
     res.json()
   })
 }
+
+export const voteUpPost = (id) => {  
+  fetch(`${api}/posts/${id}`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({option:'upVote'})
+  }).then(res => {
+    res.json()
+  })
+}
+
+export const voteDownPost = (id) => {
+  fetch(`${api}/posts/${id}`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({option:'downVote'})
+  }).then(res => {
+    res.json()
+  })
+}

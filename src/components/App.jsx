@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import { getCategories, getPosts } from '../utils/api'
-import { addPosts, addCategories } from '../actions'
 import { Route } from 'react-router-dom'
 import { connect } from 'react-redux';
+import { getCategories, getPosts } from '../utils/api'
+import { addPosts, addCategories } from '../actions'
 import ListView from './ListView'
 import Navbar from './Navbar'
 import '../App.css'
@@ -33,7 +33,7 @@ class App extends Component {
 
   render() {
     const { loadingPosts } = this.state
-    const { posts, categories} = this.props    
+    const { posts, categories} = this.props
 
     return (
       <div>
