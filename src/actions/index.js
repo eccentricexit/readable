@@ -60,10 +60,10 @@ export function voteDownPost(id){
   }
 }
 
-export function removePost ({postid}){
+export function removePost (id){
   return {
     type: REMOVE_POST,
-    postid
+    id
   }
 }
 

@@ -61,8 +61,11 @@ function posts (state = [], action) {
       return newState
     }
     case REMOVE_POST:{
-      console.log('TODO: build remove post action')
-      return {}
+      const {id} = action
+      console.log('removing post',id)
+      let newState = state.map(a => ({...a}))
+      newState.filter((p)=>p.id===id).map((p)=>{p.deleted=true})
+      return newState
     }
     default:
       return state

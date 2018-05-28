@@ -1,34 +1,39 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
-import { voteUpPost, voteDownPost } from '../actions'
+import { voteUpPost, voteDownPost, removePost } from '../actions'
 import Button from 'react-bootstrap/lib/Button'
 import Media from 'react-bootstrap/lib/Media'
 import Label from 'react-bootstrap/lib/Label'
 import {
   voteUpPost as upVoteApi,
-  voteDownPost as downVoteApi
+  voteDownPost as downVoteApi,
+  removePost as removeApi
 } from '../utils/api'
 
 class ListItem extends Component {
   voteUp = (e) => {
     e.preventDefault()
-
-    const {post,upVote,downVote} = this.props
+    const {post,upVote} = this.props
     upVote(post.id)
     upVoteApi(post.id)
   }
 
   voteDown = (e) => {
     e.preventDefault()
-
-    const {post,upVote,downVote} = this.props
+    const {post,downVote} = this.props
     downVote(post.id)
     downVoteApi(post.id)
   }
 
+  remove = (e) => {
+    e.preventDefault()
+    const {post,remove} = this.props
+    remove(post.id)
+    removeApi(post.id)
+  }
+
   render() {
     const {post,onEditClick,upVote,downVote} = this.props
-
     return (
       <div>
         <Media>
@@ -48,6 +53,7 @@ class ListItem extends Component {
           </Media.Right>
           <Media.Right>
             <Button
+              onClick={this.remove}
               className="glyphicon glyphicon-trash"
               bsSize="small" />
           </Media.Right>
@@ -70,7 +76,8 @@ class ListItem extends Component {
 function mapDispatchToProps(dispatch){
   return {
     upVote: (data) => dispatch(voteUpPost(data)),
-    downVote: (data) => dispatch(voteDownPost(data))
+    downVote: (data) => dispatch(voteDownPost(data)),
+    remove: (data) => dispatch(removePost(data))
   }
 }
 

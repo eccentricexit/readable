@@ -40,7 +40,7 @@ export const updatePost = (post) => {
   })
 }
 
-export const voteUpPost = (id) => {  
+export const voteUpPost = (id) => {
   fetch(`${api}/posts/${id}`, {
     method: 'POST',
     headers,
@@ -55,6 +55,15 @@ export const voteDownPost = (id) => {
     method: 'POST',
     headers,
     body: JSON.stringify({option:'downVote'})
+  }).then(res => {
+    res.json()
+  })
+}
+
+export const removePost = (id) => {
+  fetch(`${api}/posts/${id}`, {
+    method: 'DELETE',
+    headers
   }).then(res => {
     res.json()
   })
