@@ -33,12 +33,14 @@ class ListItem extends Component {
   }
 
   render() {
-    const {post,onEditClick,upVote,downVote} = this.props
+    const {post,onEditClick} = this.props
+    console.log(post)
+
     return (
       <div>
         <Media>
           <Media.Body>
-            <Media.Heading>{post.title}</Media.Heading>
+            <Media.Heading><a href="#">{post.title}</a></Media.Heading>
             <p>
               {post.author}
               <small> - {post.commentCount} comments - </small>

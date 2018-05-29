@@ -42,29 +42,39 @@ function posts (state = [], action) {
     case EDIT_POST:{
       const {id,title,body} = action
       let newState = state.map(a => ({...a}))
-      newState.filter((p) => p.id===id).map((post) => {
-        post.title = title
-        post.body = body
+      newState.filter((p) => p.id===id).map((p) => {
+        p.title = title
+        p.body = body
+        return p
       })
       return newState
     }
     case VOTE_UP_POST:{
       const {id} = action
       let newState = state.map(a => ({...a}))
-      newState.filter((p)=>p.id===id).map((p)=>{p.voteScore++})
+      newState.filter((p)=>p.id===id).map((p)=>{
+        p.voteScore++
+        return p
+      })
       return newState
     }
     case VOTE_DOWN_POST:{
       const {id} = action
       let newState = state.map(a => ({...a}))
-      newState.filter((p)=>p.id===id).map((p)=>{p.voteScore--})
+      newState.filter((p)=>p.id===id).map((p)=>{
+        p.voteScore--
+        return p
+      })
       return newState
     }
     case REMOVE_POST:{
       const {id} = action
       console.log('removing post',id)
       let newState = state.map(a => ({...a}))
-      newState.filter((p)=>p.id===id).map((p)=>{p.deleted=true})
+      newState.filter((p)=>p.id===id).map((p)=>{
+        p.deleted=true
+        return p
+      })
       return newState
     }
     default:

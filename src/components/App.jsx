@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
-import { Route } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 import { connect } from 'react-redux';
 import { getCategories, getPosts } from '../utils/api'
 import { addPosts, addCategories } from '../actions'
 import ListView from './ListView'
 import Navbar from './Navbar'
+import PostDetail from './PostDetail'
 import '../App.css'
 
 class App extends Component {
@@ -40,15 +41,24 @@ class App extends Component {
         <Navbar title="Readable" categories={categories} />
         <div className="container">
           {categories.map((category) => (
-            <Route
-              exact
-              path={'/'+category.path.toString().toLowerCase()}
-              key={category.path}
-              render={() => (
-                <ListView category={category.name}
-                  posts={posts}
-                  loadingPosts={loadingPosts}/>
-            )}/>
+              <Switch>
+                <Route
+                  exact
+                  path={'/'+category.path}
+                  render={() => (
+                    <ListView
+                      category={category.name}
+                      posts={posts}
+                      loadingPosts={loadingPosts}
+                    />
+                )}/>
+                <Route
+                  exact
+                  path={'/'+category.path+'/:id'}
+                  render={() => (
+                    <PostDetail />
+                )}/>
+              </Switch>
           ))}
           <Route exact path="/" render={() => (
               <ListView
@@ -56,6 +66,7 @@ class App extends Component {
                 posts={posts}
                 loadingPosts={loadingPosts}/>
           )}/>
+
         </div>
       </div>
     )

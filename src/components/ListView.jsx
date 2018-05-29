@@ -36,7 +36,7 @@ class ListView extends Component {
   render() {
     const {category,loadingPosts} = this.props
     let {posts} = this.props
-    posts = posts.filter((p) => !p.deleted)
+    posts = posts.filter((p) => !p.deleted)    
 
     return (
       <div>

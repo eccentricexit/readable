@@ -68,3 +68,7 @@ export const removePost = (id) => {
     res.json()
   })
 }
+
+export const getPost = (id) =>
+  fetch(`${api}/post/${id}`, { headers })
+    .then(res => res.json())
