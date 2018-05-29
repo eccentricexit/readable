@@ -41,7 +41,7 @@ class App extends Component {
         <Navbar title="Readable" categories={categories} />
         <div className="container">
           {categories.map((category) => (
-              <Switch>
+              <Switch key={category.name}>
                 <Route
                   exact
                   path={'/'+category.path}
@@ -55,8 +55,8 @@ class App extends Component {
                 <Route
                   exact
                   path={'/'+category.path+'/:id'}
-                  render={() => (
-                    <PostDetail />
+                  render={({match}) => (
+                    <PostDetail id={match.params.id}/>
                 )}/>
               </Switch>
           ))}

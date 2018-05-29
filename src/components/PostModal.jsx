@@ -43,7 +43,7 @@ class PostModal extends Component {
 
   onEditClick = (e) => {
     e.preventDefault()
-    const {id,title,author,body,category} = this.state
+    const {title,author,body,category} = this.state
     const {updatePost,closeClick} = this.props
     const {post} = this.props
     const newPost = {

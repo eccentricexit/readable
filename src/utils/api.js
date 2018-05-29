@@ -19,6 +19,20 @@ export const getPosts = () =>
   fetch(`${api}/posts`, { headers })
     .then(res => res.json())
 
+export const getPost = (id) =>
+  fetch(`${api}/posts/${id}`, {
+    headers
+  }).then(res =>
+    res.json()
+  )
+
+export const getComments = (id) =>
+  fetch(`${api}/posts/${id}/comments`, {
+    headers
+  }).then(res =>
+    res.json()
+  )
+
 export const addPost = (post) => {
   fetch(`${api}/posts`, {
     method: 'POST',
@@ -68,7 +82,3 @@ export const removePost = (id) => {
     res.json()
   })
 }
-
-export const getPost = (id) =>
-  fetch(`${api}/post/${id}`, { headers })
-    .then(res => res.json())

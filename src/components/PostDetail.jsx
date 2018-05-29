@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { getPost } from '../utils/api'
+import { getPost, getComments } from '../utils/api'
 import Button from 'react-bootstrap/lib/Button'
 import ListGroup from 'react-bootstrap/lib/ListGroup'
 import ListGroupItem from 'react-bootstrap/lib/ListGroupItem'
@@ -7,66 +7,82 @@ import FormGroup from 'react-bootstrap/lib/FormGroup'
 import FormControl from 'react-bootstrap/lib/FormControl'
 import Form from 'react-bootstrap/lib/Form'
 import ListItem from './ListItem'
+import PostModal from './PostModal'
 import Comment from './Comment'
 
 class PostDetail extends Component {
   state = {
-    post:{}
+    writePostModalOpen:false,
+    post:{},
+    comments:[]
+  }
+
+  openNewPostModal = () => {
+    this.setState({
+      writePostModalOpen: true,
+      post:undefined
+    })
+  }
+
+  closeWritePostModal = () => {
+    this.setState({
+      writePostModalOpen: false
+    })
+  }
+
+  openEditPostModal = (post) => {
+    this.setState({
+      writePostModalOpen: true,
+      post
+    })
   }
 
   componentDidMount(){
-    const id = this.props.params?this.props.params.id:undefined
-    console.log('id',id)
-    id && getPost(id).then((post) => {
-      console.log(post)
+    const {id} = this.props
+    id && getPost(id)
+    .then((post) => {
+      this.setState({post})
+    })
+    .then(() => getComments(id))
+    .then((comments) => {
+      this.setState({comments})
     })
   }
 
   render() {
-    console.log('test')
-    const post  = {
-      id: "6ni6ok3ym7mf1p33lnez",
-      timestamp: 1468479767190,
-      title: "Learn Redux in 10 minutes!",
-      body: "Just kidding. It takes more than 10 minutes to learn technology.",
-      author: "thingone"
-    }
-
-    const comments = [{
-      id:'asdfa',
-      author: 'Beatriz Nonato',
-      body: 'Lalalalalaaa',
-      score: 34
-    },{
-      id:'effaa',
-      author: 'Neatriz Bonato',
-      body: 'Lolololo',
-      score: 42
-    }]
+    const {post,comments} = this.state
 
     return (
-      <ListGroup>
-          <ListGroupItem key={post.id+'header'}>
-            <ListItem post={post}/>
-          </ListGroupItem>
-          <ListGroupItem key={post.id+'body'}>
-            <p>{post.body}</p>
-          </ListGroupItem>
-          <ListGroupItem key={post.id+'comments'}>
-            <h5>Comments</h5>
-            <Form>
-              <FormGroup controlId="formControlsTextarea">
-                <FormControl componentClass="textarea" placeholder="What are your thoughts?" />
-              </FormGroup>
-              <Button type="submit" bsStyle="primary">Add Comment</Button>
-            </Form>
-          </ListGroupItem>
-          {comments.map((comment) => (
-            <ListGroupItem key={comment.id}>
-              <Comment comment={comment}/>
+      <div>
+      {post
+        ? <ListGroup>
+            <ListGroupItem key={post.id+'header'}>
+              <ListItem post={post} onEditClick={this.openEditPostModal}/>
             </ListGroupItem>
-          ))}
-      </ListGroup>
+            <ListGroupItem key={post.id+'body'}>
+              <p>{post.body}</p>
+            </ListGroupItem>
+            <ListGroupItem key={post.id+'comments'}>
+              <h5>Comments</h5>
+              <Form>
+                <FormGroup controlId="formControlsTextarea">
+                  <FormControl componentClass="textarea" placeholder="What are your thoughts?" />
+                </FormGroup>
+                <Button type="submit" bsStyle="primary">Add Comment</Button>
+              </Form>
+            </ListGroupItem>
+            {comments.map((comment) => (
+              <ListGroupItem key={comment.id}>
+                <Comment comment={comment}/>
+              </ListGroupItem>
+            ))}
+          </ListGroup>
+        : <h1>404!</h1>}
+        <PostModal
+          post={this.state.post}
+          closeClick={this.closeWritePostModal}
+          isOpen={this.state.writePostModalOpen}/>
+      </div>
     )
   }
 }
