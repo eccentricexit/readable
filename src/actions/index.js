@@ -67,28 +67,23 @@ export function removePost (id){
   }
 }
 
-export function addComment ({postid,author,body}){
+export function addComment (comment){
   return {
     type: ADD_COMMENT,
-    postid,
-    author,
-    body
+    comment
   }
 }
 
-export function editComment ({commentid,postid,author,body}){
+export function editComment (comment){
   return {
     type: EDIT_COMMENT,
-    commentid,
-    postid,
-    author,
-    body
+    comment
   }
 }
 
-export function removeComment ({commentid}){
+export function removeComment (id){
   return {
     type: REMOVE_COMMENT,
-    commentid
+    id
   }
 }

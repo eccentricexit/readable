@@ -1,11 +1,15 @@
 import React, { Component } from 'react'
-import { getPost, getComments } from '../utils/api'
 import {default as UUID} from "node-uuid";
+import {
+  getPost,
+  getComments,
+  addComment as addCommentApi
+} from '../utils/api'
 import Button from 'react-bootstrap/lib/Button'
 import ListGroup from 'react-bootstrap/lib/ListGroup'
 import ListGroupItem from 'react-bootstrap/lib/ListGroupItem'
-import FormGroup from 'react-bootstrap/lib/FormGroup'
 import FormControl from 'react-bootstrap/lib/FormControl'
+import ControlLabel from 'react-bootstrap/lib/ControlLabel'
 import Form from 'react-bootstrap/lib/Form'
 import ListItem from './ListItem'
 import PostModal from './PostModal'
@@ -15,7 +19,11 @@ class PostDetail extends Component {
   state = {
     writePostModalOpen:false,
     post:{},
-    comments:[]
+    comments:[],
+    comment:{
+      body: '',
+      author: ''
+    }
   }
 
   openNewPostModal = () => {
@@ -35,6 +43,36 @@ class PostDetail extends Component {
     this.setState({
       writePostModalOpen: true,
       post
+    })
+  }
+
+  onAddCommentClick = (e) => {
+    e.preventDefault()
+    let {comment,post} = this.state
+    comment = {
+      ...comment,
+      id: UUID.v4(),
+      timestamp: Date.now(),
+      parentId: post.id,
+    }
+
+    addCommentApi(comment)
+    // addComment(comment)
+  }
+
+  updateNewCommentAuthor(author){
+    this.setState((state) => {
+      let newState = {...state}
+      newState.comment.author = author
+      return newState
+    })
+  }
+
+  updateNewCommentBody(body){
+    this.setState((state) => {
+      let newState = {...state}
+      newState.comment.body = body
+      return newState
     })
   }
 
@@ -64,12 +102,19 @@ class PostDetail extends Component {
               <p>{post.body}</p>
             </ListGroupItem>
             <ListGroupItem key={post.id+'comments'}>
-              <h5>Comments</h5>
               <Form>
-                <FormGroup controlId="formControlsTextarea">
-                  <FormControl componentClass="textarea" placeholder="What are your thoughts?" />
-                </FormGroup>
-                <Button type="submit" bsStyle="primary">Add Comment</Button>
+                <ControlLabel>Author</ControlLabel>
+                <FormControl
+                  type="text"
+                  placeholder="Elon Molusk"
+                  onChange={(event) => this.updateNewCommentAuthor(event.target.value)}
+                />
+                <ControlLabel>Comments</ControlLabel>
+                <FormControl
+                  componentClass="textarea"
+                  placeholder="What are your thoughts?"
+                  onChange={(event) => this.updateNewCommentBody(event.target.value)}/>
+                <Button onClick={this.onAddCommentClick} bsStyle="primary">Add Comment</Button>
               </Form>
             </ListGroupItem>
             {comments.map((comment) => (

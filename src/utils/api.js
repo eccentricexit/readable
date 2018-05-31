@@ -82,3 +82,15 @@ export const removePost = (id) => {
     res.json()
   })
 }
+
+export const addComment = (comment) => {
+  const {id,timestamp,body,author,parentId} = comment  
+
+  fetch(`${api}/comments/`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({id,timestamp,body,author,parentId})
+  }).then(res => {
+    res.json()
+  })
+}
