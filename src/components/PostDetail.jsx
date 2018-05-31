@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { getPost, getComments } from '../utils/api'
+import {default as UUID} from "node-uuid";
 import Button from 'react-bootstrap/lib/Button'
 import ListGroup from 'react-bootstrap/lib/ListGroup'
 import ListGroupItem from 'react-bootstrap/lib/ListGroupItem'
