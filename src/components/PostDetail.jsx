@@ -67,6 +67,7 @@ class PostDetail extends Component {
       id: UUID.v4(),
       timestamp: Date.now(),
       parentId: id,
+      voteScore: 1
     }
 
     let newPost = {...post}
