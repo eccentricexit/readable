@@ -5,35 +5,35 @@ import Button from 'react-bootstrap/lib/Button'
 import Media from 'react-bootstrap/lib/Media'
 import Label from 'react-bootstrap/lib/Label'
 import {
-  voteUpPost as upVoteApi,
-  voteDownPost as downVoteApi,
+  votePost as voteApi,
   removePost as removeApi
 } from '../utils/api'
 
 class ListItem extends Component {
   voteUp = (e) => {
     e.preventDefault()
-    const {post,upVote} = this.props
-    upVote(post.id)
-    upVoteApi(post.id)
+    const {id,upVote} = this.props
+    upVote(id)
+    voteApi(id,'upVote')
   }
 
   voteDown = (e) => {
     e.preventDefault()
-    const {post,downVote} = this.props
-    downVote(post.id)
-    downVoteApi(post.id)
+    const {id,downVote} = this.props
+    downVote(id)
+    voteApi(id,'downVote')
   }
 
   remove = (e) => {
     e.preventDefault()
-    const {post,remove} = this.props
-    remove(post.id)
-    removeApi(post.id)
+    const {id,remove} = this.props
+    remove(id)
+    removeApi(id)
   }
 
   render() {
-    const {post,onEditClick} = this.props
+    const {id,onEditClick} = this.props
+    const post = this.props.posts[id]    
 
     return (
       <div>
@@ -84,7 +84,11 @@ function mapDispatchToProps(dispatch){
   }
 }
 
+function mapStateToProps({posts}){
+  return {posts}
+}
+
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(ListItem)

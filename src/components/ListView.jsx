@@ -68,7 +68,7 @@ class ListView extends Component {
             : <ListGroup>
                 {posts.map((post) => (
                   <ListGroupItem key={post.id}>
-                    <ListItem post={post} onEditClick={this.openEditPostModal} />
+                    <ListItem id={post.id} onEditClick={this.openEditPostModal} />
                   </ListGroupItem>
                 ))}
               </ListGroup>

@@ -94,13 +94,13 @@ class PostDetail extends Component {
       <div>
       {post
         ? <ListGroup>
-            <ListGroupItem key={post.id+'header'}>
-              <ListItem post={post} onEditClick={this.openEditPostModal}/>
+            <ListGroupItem key={id+'header'}>
+              <ListItem id={id} onEditClick={this.openEditPostModal}/>
             </ListGroupItem>
-            <ListGroupItem key={post.id+'body'}>
+            <ListGroupItem key={id+'body'}>
               <p>{post.body}</p>
             </ListGroupItem>
-            <ListGroupItem key={post.id+'comments'}>
+            <ListGroupItem key={id+'comments'}>
               <Form>
                 <ControlLabel>Author</ControlLabel>
                 <FormControl
