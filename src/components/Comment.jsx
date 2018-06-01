@@ -30,8 +30,7 @@ class Comment extends Component {
   }
 
   render() {
-    const {comment} = this.props    
-
+    const {comment} = this.props
     return (
       <Media>
         <Media.Body>

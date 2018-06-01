@@ -1,13 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { addPost, editPost } from '../actions'
-import { addPost as addPostApi } from '../utils/api'
+import { editPost } from '../actions'
 import { updatePost as updatePostApi } from '../utils/api'
 import Modal from 'react-bootstrap/lib/Modal'
 import Button from 'react-bootstrap/lib/Button'
-import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar'
-import DropdownButton from 'react-bootstrap/lib/DropdownButton'
-import MenuItem from 'react-bootstrap/lib/MenuItem'
 import Form from 'react-bootstrap/lib/Form'
 import FormGroup from 'react-bootstrap/lib/FormGroup'
 import FormControl from 'react-bootstrap/lib/FormControl'
@@ -67,7 +63,7 @@ class EditPostModal extends Component {
   }
 
   render() {
-    const {isOpen,closeClick,post,categories} = this.props
+    const {isOpen,closeClick,post} = this.props
 
     return (
       <Modal show={isOpen} onHide={closeClick}>

@@ -32,12 +32,13 @@ class App extends Component {
     .then((posts) => {
       posts.map((post) => {
         getComments(post.id)
-        .then((comments) => {          
+        .then((comments) => {
           addAllComments({
             id: post.id,
             comments
           })
         })
+        return post
       })
     })
     .then(() => {

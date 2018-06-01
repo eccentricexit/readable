@@ -29,7 +29,7 @@ function posts (state = {}, action) {
       const {posts} = action
       let newState = {...state}
       posts.map(post => {
-        newState[post.id] = post
+        return newState[post.id] = post
       })
       return newState
     }
@@ -62,6 +62,7 @@ function posts (state = {}, action) {
       newState[id].comments = {}
       comments.map((comment) => {
         newState[id].comments = comments
+        return comment
       })
       return newState
     }
