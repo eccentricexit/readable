@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux';
+import { connect } from 'react-redux'
 import { addPost, editPost } from '../actions'
 import { addPost as addPostApi } from '../utils/api'
 import { updatePost as updatePostApi } from '../utils/api'

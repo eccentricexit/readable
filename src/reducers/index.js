@@ -4,12 +4,11 @@ import {
   ADD_POSTS,
   ADD_POST,
   EDIT_POST,
+  ADD_COMMENT,
+  ADD_COMMENTS,
   VOTE_UP_POST,
   VOTE_DOWN_POST,
-  REMOVE_POST,
-  ADD_COMMENT,
-  EDIT_COMMENT,
-  REMOVE_COMMENT
+  REMOVE_POST
 } from '../actions'
 
 function categories (state = [], action) {
@@ -24,57 +23,64 @@ function categories (state = [], action) {
   }
 }
 
-function posts (state = [], action) {
+function posts (state = {}, action) {
   switch (action.type) {
     case ADD_POSTS:{
       const {posts} = action
-      let newState = state.map(a => ({...a}));
-      posts.map(post => newState.push(post))
+      let newState = {...state}
+      posts.map(post => {
+        newState[post.id] = post
+      })
       return newState
     }
     case ADD_POST:{
       const {id,timestamp,title,category,author,body} = action
       const post = {id,timestamp,title,category,author,body}
-      let newState = state.map(a => ({...a}));
-      newState.push(post)
+      let newState = {...state}
+      newState[post.id] = post
       return newState
     }
     case EDIT_POST:{
       const {id,title,body} = action
-      let newState = state.map(a => ({...a}))
-      newState.filter((p) => p.id===id).map((p) => {
-        p.title = title
-        p.body = body
-        return p
-      })
-      return newState
-    }
-    case VOTE_UP_POST:{
-      const {id} = action
-      let newState = state.map(a => ({...a}))
-      newState.filter((p)=>p.id===id).map((p)=>{
-        p.voteScore++
-        return p
-      })
-      return newState
-    }
-    case VOTE_DOWN_POST:{
-      const {id} = action
-      let newState = state.map(a => ({...a}))
-      newState.filter((p)=>p.id===id).map((p)=>{
-        p.voteScore--
-        return p
-      })
+      let newState = {...state}
+      newState[id] = {
+        ...newState[id],
+        title: title,
+        body: body
+      }
       return newState
     }
     case REMOVE_POST:{
       const {id} = action
-      console.log('removing post',id)
-      let newState = state.map(a => ({...a}))
-      newState.filter((p)=>p.id===id).map((p)=>{
-        p.deleted=true
-        return p
+      let newState = {...state}
+      newState[id].deleted = true
+      return newState
+    }
+    case ADD_COMMENTS:{
+      const {id,comments} = action
+      let newState = {...state}
+      newState[id].comments = {}
+      comments.map((comment) => {
+        newState[id].comments = comments
       })
+      return newState
+    }
+    case ADD_COMMENT:{
+      const {comment} = action
+      let newState = {...state}
+      newState[comment.parentId].comments[comment.id] = comment
+      return newState
+    }
+    case VOTE_UP_POST:{
+      const {id} = action
+      let newState = {...state}
+      newState[id].voteScore++
+      return newState
+    }
+    case VOTE_DOWN_POST:{
+      const {id} = action
+      let newState = {...state}
+      newState[id].voteScore++
       return newState
     }
     default:
@@ -82,24 +88,7 @@ function posts (state = [], action) {
   }
 }
 
-function comments (state = [], action) {
-  switch (action.type) {
-    case ADD_COMMENT :
-      console.log('TODO: build add comment action')
-      return {}
-    case EDIT_COMMENT:
-      console.log('TODO: build edit comment action')
-      return {}
-    case REMOVE_COMMENT:
-      console.log('TODO: build remove comment action')
-      return {}
-    default :
-      return state
-  }
-}
-
 export default combineReducers({
   categories,
-  posts,
-  comments
+  posts
 })

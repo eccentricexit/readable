@@ -7,9 +7,12 @@ export const REMOVE_POST = 'REMOVE_POST'
 export const VOTE_UP_POST = 'VOTE_UP_POST'
 export const VOTE_DOWN_POST = 'VOTE_DOWN_POST'
 
+export const ADD_COMMENTS = 'ADD_COMMENTS'
 export const ADD_COMMENT = 'ADD_COMMENT'
 export const EDIT_COMMENT = 'EDIT_COMMENT'
 export const REMOVE_COMMENT = 'REMOVE_COMMENT'
+export const VOTE_UP_COMMENT = 'VOTE_UP_COMMENT'
+export const VOTE_DOWN_COMMENT = 'VOTE_DOWN_COMMENT'
 
 export function addCategories (categories){
   return {
@@ -22,6 +25,14 @@ export function addPosts (posts){
   return {
     type: ADD_POSTS,
     posts
+  }
+}
+
+export function addComments ({id,comments}){
+  return {
+    type: ADD_COMMENTS,
+    id,
+    comments
   }
 }
 

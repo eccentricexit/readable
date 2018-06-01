@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { Route, Switch } from 'react-router-dom'
 import { connect } from 'react-redux';
-import { getCategories, getPosts } from '../utils/api'
-import { addPosts, addCategories } from '../actions'
+import { getCategories, getPosts, getComments } from '../utils/api'
+import { addPosts, addCategories, addComments } from '../actions'
 import ListView from './ListView'
 import Navbar from './Navbar'
 import PostDetail from './PostDetail'
@@ -14,7 +14,7 @@ class App extends Component {
   }
 
   componentDidMount(){
-    const {addAllCategories,addAllPosts} = this.props
+    const {addAllCategories, addAllPosts, addAllComments} = this.props
 
     this.setState({
       loadingPosts:true
@@ -24,8 +24,23 @@ class App extends Component {
       addAllCategories(categories)
     })
 
-    getPosts().then((posts) => {
+    getPosts()
+    .then((posts) => {
       addAllPosts(posts)
+      return posts
+    })
+    .then((posts) => {
+      posts.map((post) => {
+        getComments(post.id)
+        .then((comments) => {          
+          addAllComments({
+            id: post.id,
+            comments
+          })
+        })
+      })
+    })
+    .then(() => {
       this.setState({
         loadingPosts: false
       })
@@ -33,40 +48,39 @@ class App extends Component {
   }
 
   render() {
-    const { loadingPosts } = this.state
-    const { posts, categories} = this.props
+    const {loadingPosts } = this.state
+    const {posts, categories} = this.props
 
     return (
       <div>
         <Navbar title="Readable" categories={categories} />
         <div className="container">
           {categories.map((category) => (
-              <Switch key={category.name}>
-                <Route
-                  exact
-                  path={'/'+category.path}
-                  render={() => (
-                    <ListView
-                      category={category.name}
-                      posts={posts}
-                      loadingPosts={loadingPosts}
-                    />
-                )}/>
-                <Route
-                  exact
-                  path={'/'+category.path+'/:id'}
-                  render={({match}) => (
-                    <PostDetail id={match.params.id}/>
-                )}/>
-              </Switch>
+            <Switch key={category.name}>
+              <Route
+                exact
+                path={'/'+category.path}
+                render={() => (
+                  <ListView
+                    category={category.name}
+                    posts={posts}
+                    loadingPosts={loadingPosts}
+                  />
+              )}/>
+              <Route
+                exact
+                path={'/'+category.path+'/:id'}
+                render={({match}) => (
+                  <PostDetail id={match.params.id}/>
+              )}/>
+            </Switch>
           ))}
           <Route exact path="/" render={() => (
-              <ListView
-                category="All"
-                posts={posts}
-                loadingPosts={loadingPosts}/>
+            <ListView
+              category="All"
+              posts={posts}
+              loadingPosts={loadingPosts}/>
           )}/>
-
         </div>
       </div>
     )
@@ -80,7 +94,8 @@ function mapStateToProps ({ categories, posts }) {
 function mapDispatchToProps (dispatch) {
   return {
     addAllCategories: (data) => dispatch(addCategories(data)),
-    addAllPosts: (data) => dispatch(addPosts(data))
+    addAllPosts: (data) => dispatch(addPosts(data)),
+    addAllComments: (data) => dispatch(addComments(data))
   }
 }
 

@@ -49,9 +49,9 @@ export const updatePost = (post) => {
     method: 'PUT',
     headers,
     body: JSON.stringify({title,body})
-  }).then(res => {
-    res.json()
-  })
+  }).then(res =>
+    res.text()
+  )
 }
 
 export const voteUpPost = (id) => {
@@ -84,7 +84,7 @@ export const removePost = (id) => {
 }
 
 export const addComment = (comment) => {
-  const {id,timestamp,body,author,parentId} = comment  
+  const {id,timestamp,body,author,parentId} = comment
 
   fetch(`${api}/comments/`, {
     method: 'POST',

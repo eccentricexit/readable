@@ -1,10 +1,7 @@
 import React, { Component } from 'react'
-import {default as UUID} from "node-uuid";
-import {
-  getPost,
-  getComments,
-  addComment as addCommentApi
-} from '../utils/api'
+import { default as UUID } from "node-uuid"
+import { editPost, addComment } from '../actions'
+import { connect } from 'react-redux'
 import Button from 'react-bootstrap/lib/Button'
 import ListGroup from 'react-bootstrap/lib/ListGroup'
 import ListGroupItem from 'react-bootstrap/lib/ListGroupItem'
@@ -14,12 +11,15 @@ import Form from 'react-bootstrap/lib/Form'
 import ListItem from './ListItem'
 import PostModal from './PostModal'
 import Comment from './Comment'
+import {
+  addComment as addCommentApi,
+  updatePost as updatePostApi
+} from '../utils/api'
 
 class PostDetail extends Component {
   state = {
     writePostModalOpen:false,
     post:{},
-    comments:[],
     comment:{
       body: '',
       author: ''
@@ -48,16 +48,22 @@ class PostDetail extends Component {
 
   onAddCommentClick = (e) => {
     e.preventDefault()
-    let {comment,post} = this.state
+    let {comment} = this.state
+    const {updatePost,addCommentState,id,post} = this.props
     comment = {
       ...comment,
       id: UUID.v4(),
       timestamp: Date.now(),
-      parentId: post.id,
+      parentId: id,
     }
 
+    let newPost = {...post}
+    newPost.commentCount++
+
+    updatePostApi(newPost)
+    updatePost(newPost)
     addCommentApi(comment)
-    // addComment(comment)
+    addCommentState(comment)
   }
 
   updateNewCommentAuthor(author){
@@ -76,20 +82,13 @@ class PostDetail extends Component {
     })
   }
 
-  componentDidMount(){
-    const {id} = this.props
-    id && getPost(id)
-    .then((post) => {
-      this.setState({post})
-    })
-    .then(() => getComments(id))
-    .then((comments) => {
-      this.setState({comments})
-    })
-  }
-
   render() {
-    const {post,comments} = this.state
+    const {id,posts} = this.props
+    const post = posts[id]
+    const commentsObj = post && post.comments ? post.comments : {}
+    const comments = Object.keys(commentsObj).map((id) => {
+      return commentsObj[id]
+    })
 
     return (
       <div>
@@ -114,11 +113,12 @@ class PostDetail extends Component {
                   componentClass="textarea"
                   placeholder="What are your thoughts?"
                   onChange={(event) => this.updateNewCommentBody(event.target.value)}/>
+                  <br />
                 <Button onClick={this.onAddCommentClick} bsStyle="primary">Add Comment</Button>
               </Form>
             </ListGroupItem>
-            {comments.map((comment) => (
-              <ListGroupItem key={comment.id}>
+            {comments && comments.map((comment) => (
+              <ListGroupItem key={UUID.v4()}>
                 <Comment comment={comment}/>
               </ListGroupItem>
             ))}
@@ -133,4 +133,18 @@ class PostDetail extends Component {
   }
 }
 
-export default PostDetail
+function mapDispatchToProps (dispatch) {
+  return {
+    updatePost: (data) => dispatch(editPost(data)),
+    addCommentState: (data) => dispatch(addComment(data))
+  }
+}
+
+function mapStateToProps ({posts}) {
+  return {posts}
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PostDetail)

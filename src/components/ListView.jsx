@@ -35,8 +35,10 @@ class ListView extends Component {
 
   render() {
     const {category,loadingPosts} = this.props
-    let {posts} = this.props
-    posts = posts.filter((p) => !p.deleted)
+    const postsObj = this.props.posts
+    const posts = Object.keys(postsObj).map((id) => {
+      return postsObj[id]
+    })
 
     return (
       <div>
