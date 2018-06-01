@@ -95,7 +95,7 @@ class NewPostModal extends Component {
                 <DropdownButton
                   bsSize="small"
                   title="Select..."
-                  id="dropdown-size-large"
+                  id="dropdown"
                 >
                   {categories.map((category) => (
                     <MenuItem
