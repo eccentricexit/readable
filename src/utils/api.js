@@ -1,8 +1,7 @@
 const api = 'http://localhost:3001'
 
 let token = localStorage.token
-if (!token)
-  token = localStorage.token = Math.random().toString(36).substr(-8)
+if (!token) { token = localStorage.token = Math.random().toString(36).substr(-8) }
 
 const headers = {
   'Authorization': token,
@@ -48,7 +47,7 @@ export const updatePost = (post) => {
   fetch(`${api}/posts/${post.id}`, {
     method: 'PUT',
     headers,
-    body: JSON.stringify({title,body})
+    body: JSON.stringify({title, body})
   }).then(res =>
     res.text()
   )
@@ -59,13 +58,13 @@ export const updateComment = (comment) => {
   fetch(`${api}/comments/${comment.id}`, {
     method: 'PUT',
     headers,
-    body: JSON.stringify({timestamp,body})
+    body: JSON.stringify({timestamp, body})
   }).then(res =>
     res.text()
   )
 }
 
-export const votePost = (id,option) => {
+export const votePost = (id, option) => {
   fetch(`${api}/posts/${id}`, {
     method: 'POST',
     headers,
@@ -85,12 +84,12 @@ export const removePost = (id) => {
 }
 
 export const addComment = (comment) => {
-  const {id,timestamp,body,author,parentId} = comment
+  const {id, timestamp, body, author, parentId} = comment
 
   fetch(`${api}/comments/`, {
     method: 'POST',
     headers,
-    body: JSON.stringify({id,timestamp,body,author,parentId})
+    body: JSON.stringify({id, timestamp, body, author, parentId})
   }).then(res => {
     res.json()
   })
@@ -99,13 +98,13 @@ export const addComment = (comment) => {
 export const removeComment = (id) => {
   fetch(`${api}/comments/${id}`, {
     method: 'DELETE',
-    headers    
+    headers
   }).then(res => {
     res.json()
   })
 }
 
-export const voteComment = (id,option) => {
+export const voteComment = (id, option) => {
   fetch(`${api}/comments/${id}`, {
     method: 'POST',
     headers,

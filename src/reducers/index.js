@@ -1,4 +1,4 @@
-import { combineReducers } from 'redux';
+import { combineReducers } from 'redux'
 import {
   ADD_CATEGORIES,
   ADD_POSTS,
@@ -18,7 +18,7 @@ function categories (state = [], action) {
   switch (action.type) {
     case ADD_CATEGORIES:
       const {categories} = action
-      let newState = state.map(a => ({...a}));
+      let newState = state.map(a => ({...a}))
       categories.map(category => newState.push(category))
       return newState
     default:
@@ -28,7 +28,7 @@ function categories (state = [], action) {
 
 function posts (state = {}, action) {
   switch (action.type) {
-    case ADD_POSTS:{
+    case ADD_POSTS: {
       const {posts} = action
       let newState = {...state}
       posts.map(post => {
@@ -36,15 +36,15 @@ function posts (state = {}, action) {
       })
       return newState
     }
-    case ADD_POST:{
-      const {id,timestamp,title,category,author,body} = action
-      const post = {id,timestamp,title,category,author,body}
+    case ADD_POST: {
+      const {id, timestamp, title, category, author, body} = action
+      const post = {id, timestamp, title, category, author, body}
       let newState = {...state}
       newState[post.id] = post
       return newState
     }
-    case EDIT_POST:{
-      const {id,title,body} = action
+    case EDIT_POST: {
+      const {id, title, body} = action
       let newState = {...state}
       newState[id] = {
         ...newState[id],
@@ -53,14 +53,14 @@ function posts (state = {}, action) {
       }
       return newState
     }
-    case REMOVE_POST:{
+    case REMOVE_POST: {
       const {id} = action
       let newState = {...state}
       newState[id].deleted = true
       return newState
     }
-    case ADD_COMMENTS:{
-      const {id,comments} = action
+    case ADD_COMMENTS: {
+      const {id, comments} = action
       let newState = {...state}
       newState[id].comments = {}
       comments.map((comment) => {
@@ -68,38 +68,38 @@ function posts (state = {}, action) {
       })
       return newState
     }
-    case ADD_COMMENT:{
+    case ADD_COMMENT: {
       const {comment} = action
       let newState = {...state}
       newState[comment.parentId].comments[comment.id] = comment
       return newState
     }
-    case REMOVE_COMMENT:{
-      const {id,parentId} = action
+    case REMOVE_COMMENT: {
+      const {id, parentId} = action
       let newState = {...state}
       delete newState[parentId].comments[id]
       return newState
     }
-    case VOTE_UP_POST:{
+    case VOTE_UP_POST: {
       const {id} = action
       let newState = {...state}
       newState[id].voteScore++
       return newState
     }
-    case VOTE_DOWN_POST:{
+    case VOTE_DOWN_POST: {
       const {id} = action
       let newState = {...state}
       newState[id].voteScore--
       return newState
     }
-    case VOTE_UP_COMMENT:{
-      const {id,parentId} = action
+    case VOTE_UP_COMMENT: {
+      const {id, parentId} = action
       let newState = {...state}
       newState[parentId].comments[id].voteScore++
       return newState
     }
-    case VOTE_DOWN_COMMENT:{
-      const {id,parentId} = action
+    case VOTE_DOWN_COMMENT: {
+      const {id, parentId} = action
       let newState = {...state}
       newState[parentId].comments[id].voteScore--
       return newState
