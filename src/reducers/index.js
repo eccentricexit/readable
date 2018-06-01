@@ -80,7 +80,7 @@ function posts (state = {}, action) {
     case VOTE_DOWN_POST:{
       const {id} = action
       let newState = {...state}
-      newState[id].voteScore++
+      newState[id].voteScore--
       return newState
     }
     default:
