@@ -14,7 +14,7 @@ import FormControl from 'react-bootstrap/lib/FormControl'
 import ControlLabel from 'react-bootstrap/lib/ControlLabel'
 import Col from 'react-bootstrap/lib/Col'
 
-class PostModal extends Component {
+class NewPostModal extends Component {
   state = {
     title:'',
     author:'',
@@ -40,25 +40,6 @@ class PostModal extends Component {
     closeClick()
   }
 
-  onSaveEditClick = (e) => {
-    e.preventDefault()
-    const {title,author,body,category} = this.state
-    const {updatePost,closeClick} = this.props
-    const {post} = this.props
-    const newPost = {
-      id: post.id,
-      timestamp: Date.now(),
-      category,
-      title,
-      author,
-      body
-    }
-
-    updatePostApi(newPost)
-    updatePost(newPost)
-    closeClick()
-  }
-
   updateTitle(title){
     this.setState({title})
   }
@@ -76,24 +57,22 @@ class PostModal extends Component {
   }
 
   componentWillReceiveProps(){
-    const {post} = this.props
-    console.log('wilReceiveProps post: ',post)
-    post && this.setState({
-      title:post.title,
-      body:post.body
+    this.setState({
+      title:'',
+      author:'',
+      category:'',
+      body:''
     })
   }
 
   render() {
-    const {isOpen,closeClick,post,categories} = this.props
-    const isEditing = typeof(post) !== 'undefined' ? true : false
+    const {isOpen,closeClick,categories} = this.props
     const {category} = this.state
-
 
     return (
       <Modal show={isOpen} onHide={closeClick}>
         <Modal.Header closeButton>
-          <Modal.Title>{isEditing?'Edit':'New'}</Modal.Title>
+          <Modal.Title>New</Modal.Title>
         </Modal.Header>
         <Modal.Body>
         <Form horizontal>
@@ -105,52 +84,44 @@ class PostModal extends Component {
               <FormControl
                 type="text"
                 placeholder="Ground Control To Major Tom..."
-                defaultValue={isEditing?post.title:''}
                 onChange={(event) => this.updateTitle(event.target.value)}/>
             </Col>
           </FormGroup>
-
-          {!isEditing &&
-            <FormGroup controlId="formHorizontalAuthor">
-              <Col componentClass={ControlLabel} sm={2}>
-                Category: {category}
-              </Col>
-              <Col sm={10}>
-                <ButtonToolbar>
-                  <DropdownButton
-                    bsSize="small"
-                    title="Select..."
-                    id="dropdown-size-large"
-                  >
-                    {categories.map((category) => (
-                      <MenuItem
-                        eventKey={category.name}
-                        key={category.name}
-                        onSelect={this.onCategorySelect}>
-                        {category.name}
-                      </MenuItem>
-                    ))}
-                  </DropdownButton>
-                </ButtonToolbar>
-              </Col>
-            </FormGroup>
-          }
-          {!isEditing &&
-            <FormGroup controlId="formHorizontalAuthor">
-              <Col componentClass={ControlLabel} sm={2}>
-                Author
-              </Col>
-              <Col sm={10}>
-                <FormControl
-                  type="text"
-                  placeholder="Elon Molusk"
-                  defaultValue={isEditing?post.author:''}
-                  onChange={(event) => this.updateAuthor(event.target.value)}
-                />
-              </Col>
-            </FormGroup>
-          }
-
+          <FormGroup controlId="formHorizontalAuthor">
+            <Col componentClass={ControlLabel} sm={2}>
+              Category: {category}
+            </Col>
+            <Col sm={10}>
+              <ButtonToolbar>
+                <DropdownButton
+                  bsSize="small"
+                  title="Select..."
+                  id="dropdown-size-large"
+                >
+                  {categories.map((category) => (
+                    <MenuItem
+                      eventKey={category.name}
+                      key={category.name}
+                      onSelect={this.onCategorySelect}>
+                      {category.name}
+                    </MenuItem>
+                  ))}
+                </DropdownButton>
+              </ButtonToolbar>
+            </Col>
+          </FormGroup>
+          <FormGroup controlId="formHorizontalAuthor">
+            <Col componentClass={ControlLabel} sm={2}>
+              Author
+            </Col>
+            <Col sm={10}>
+              <FormControl
+                type="text"
+                placeholder="Elon Molusk"
+                onChange={(event) => this.updateAuthor(event.target.value)}
+              />
+            </Col>
+          </FormGroup>
           <FormGroup controlId="formControlsTextarea">
             <Col componentClass={ControlLabel} sm={2}>
               Body
@@ -158,19 +129,17 @@ class PostModal extends Component {
             <Col sm={10}>
               <FormControl
                 type="text"
-                defaultValue={isEditing?post.body:''}
                 componentClass="textarea"
                 placeholder="This is Major Tom to ground control..."
                 onChange={(event) => this.updateBody(event.target.value)}/>
             </Col>
           </FormGroup>
-
           <FormGroup>
             <Col smOffset={2} sm={10}>
               <Button
                 type="submit"
                 bsStyle="primary"
-                onClick={isEditing?this.onSaveEditClick:this.onAddClick}>Publish</Button>
+                onClick={this.onAddClick}>Publish</Button>
             </Col>
           </FormGroup>
           </Form>
@@ -182,8 +151,7 @@ class PostModal extends Component {
 
 function mapDispatchToProps (dispatch) {
   return {
-    publishPost: (data) => dispatch(addPost(data)),
-    updatePost: (data) => dispatch(editPost(data))
+    publishPost: (data) => dispatch(addPost(data))
   }
 }
 
@@ -191,8 +159,7 @@ function mapStateToProps ({categories}){
   return {categories}
 }
 
-
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(PostModal)
+)(NewPostModal)

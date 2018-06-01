@@ -14,39 +14,22 @@ import FormControl from 'react-bootstrap/lib/FormControl'
 import ControlLabel from 'react-bootstrap/lib/ControlLabel'
 import Col from 'react-bootstrap/lib/Col'
 
-class PostModal extends Component {
+class EditPostModal extends Component {
   state = {
     title:'',
-    author:'',
-    category:'',
     body:''
-  }
-
-  onAddClick = (e) => {
-    e.preventDefault()
-    const {title, author, body, category} = this.state
-    const {publishPost, closeClick} = this.props
-
-    const post = {
-      id: Math.random().toString(36).substr(-8),
-      timestamp: Date.now(),
-      category,
-      title,
-      author,
-      body
-    }
-    addPostApi(post)
-    publishPost(post)
-    closeClick()
   }
 
   onSaveEditClick = (e) => {
     e.preventDefault()
-    const {title,author,body,category} = this.state
+    const {title,body} = this.state
     const {updatePost,closeClick} = this.props
-    const {post} = this.props
+    const {category,author,id} = this.props.post
+
+    console.log('title, body',title,body)
+
     const newPost = {
-      id: post.id,
+      id,
       timestamp: Date.now(),
       category,
       title,
@@ -63,37 +46,33 @@ class PostModal extends Component {
     this.setState({title})
   }
 
-  updateAuthor(author){
-    this.setState({author})
-  }
-
   updateBody(body){
     this.setState({body})
   }
 
-  onCategorySelect = (category) => {
-    this.setState({category})
+  componentDidMount() {
+    this.props.onRef(this)
+  }
+  componentWillUnmount() {
+    this.props.onRef(undefined)
   }
 
-  componentWillReceiveProps(){
-    const {post} = this.props
-    console.log('wilReceiveProps post: ',post)
-    post && this.setState({
-      title:post.title,
-      body:post.body
+  updateStateWithPost(post){
+    const {title,body} = post ? post : ''
+
+    this.setState({
+      title,
+      body
     })
   }
 
   render() {
     const {isOpen,closeClick,post,categories} = this.props
-    const isEditing = typeof(post) !== 'undefined' ? true : false
-    const {category} = this.state
-
 
     return (
       <Modal show={isOpen} onHide={closeClick}>
         <Modal.Header closeButton>
-          <Modal.Title>{isEditing?'Edit':'New'}</Modal.Title>
+          <Modal.Title>Edit</Modal.Title>
         </Modal.Header>
         <Modal.Body>
         <Form horizontal>
@@ -104,52 +83,11 @@ class PostModal extends Component {
             <Col sm={10}>
               <FormControl
                 type="text"
+                defaultValue={post && post.title}
                 placeholder="Ground Control To Major Tom..."
-                defaultValue={isEditing?post.title:''}
                 onChange={(event) => this.updateTitle(event.target.value)}/>
             </Col>
           </FormGroup>
-
-          {!isEditing &&
-            <FormGroup controlId="formHorizontalAuthor">
-              <Col componentClass={ControlLabel} sm={2}>
-                Category: {category}
-              </Col>
-              <Col sm={10}>
-                <ButtonToolbar>
-                  <DropdownButton
-                    bsSize="small"
-                    title="Select..."
-                    id="dropdown-size-large"
-                  >
-                    {categories.map((category) => (
-                      <MenuItem
-                        eventKey={category.name}
-                        key={category.name}
-                        onSelect={this.onCategorySelect}>
-                        {category.name}
-                      </MenuItem>
-                    ))}
-                  </DropdownButton>
-                </ButtonToolbar>
-              </Col>
-            </FormGroup>
-          }
-          {!isEditing &&
-            <FormGroup controlId="formHorizontalAuthor">
-              <Col componentClass={ControlLabel} sm={2}>
-                Author
-              </Col>
-              <Col sm={10}>
-                <FormControl
-                  type="text"
-                  placeholder="Elon Molusk"
-                  defaultValue={isEditing?post.author:''}
-                  onChange={(event) => this.updateAuthor(event.target.value)}
-                />
-              </Col>
-            </FormGroup>
-          }
 
           <FormGroup controlId="formControlsTextarea">
             <Col componentClass={ControlLabel} sm={2}>
@@ -158,7 +96,7 @@ class PostModal extends Component {
             <Col sm={10}>
               <FormControl
                 type="text"
-                defaultValue={isEditing?post.body:''}
+                defaultValue={post && post.body}
                 componentClass="textarea"
                 placeholder="This is Major Tom to ground control..."
                 onChange={(event) => this.updateBody(event.target.value)}/>
@@ -170,7 +108,7 @@ class PostModal extends Component {
               <Button
                 type="submit"
                 bsStyle="primary"
-                onClick={isEditing?this.onSaveEditClick:this.onAddClick}>Publish</Button>
+                onClick={this.onSaveEditClick}>Publish</Button>
             </Col>
           </FormGroup>
           </Form>
@@ -182,7 +120,6 @@ class PostModal extends Component {
 
 function mapDispatchToProps (dispatch) {
   return {
-    publishPost: (data) => dispatch(addPost(data)),
     updatePost: (data) => dispatch(editPost(data))
   }
 }
@@ -195,4 +132,4 @@ function mapStateToProps ({categories}){
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(PostModal)
+)(EditPostModal)

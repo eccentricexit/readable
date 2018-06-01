@@ -4,32 +4,40 @@ import ListGroupItem from 'react-bootstrap/lib/ListGroupItem'
 import Button from 'react-bootstrap/lib/Button'
 import ListItem from './ListItem'
 import Loading from 'react-loading'
-import PostModal from './PostModal'
+import NewPostModal from './NewPostModal'
+import EditPostModal from './EditPostModal'
 
 class ListView extends Component {
 
   state = {
-    writePostModalOpen:false,
+    editPostModalOpen:false,
+    newPostModalOpen:false,
     post:undefined
   }
 
   openNewPostModal = () => {
     this.setState({
-      writePostModalOpen: true,
-      post:undefined
+      newPostModalOpen: true
     })
   }
 
-  closeWritePostModal = () => {
+  closeNewPostModal = () => {
     this.setState({
-      writePostModalOpen: false
+      newPostModalOpen: false
     })
   }
 
   openEditPostModal = (post) => {
     this.setState({
-      writePostModalOpen: true,
+      editPostModalOpen: true,
       post
+    })
+    this.child.updateStateWithPost(post)
+  }
+
+  closeEditPostModal = () => {
+    this.setState({
+      editPostModalOpen: false
     })
   }
 
@@ -63,12 +71,18 @@ class ListView extends Component {
                     <ListItem post={post} onEditClick={this.openEditPostModal} />
                   </ListGroupItem>
                 ))}
-              </ListGroup>}
+              </ListGroup>
+          }
 
-        <PostModal
+        <EditPostModal
           post={this.state.post}
-          closeClick={this.closeWritePostModal}
-          isOpen={this.state.writePostModalOpen}/>
+          closeClick={this.closeEditPostModal}
+          isOpen={this.state.editPostModalOpen}
+          onRef={ref => (this.child = ref)} />
+
+        <NewPostModal
+          closeClick={this.closeNewPostModal}
+          isOpen={this.state.newPostModalOpen}/>
 
       </div>
     )
