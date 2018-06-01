@@ -38,7 +38,16 @@ function posts (state = {}, action) {
     }
     case ADD_POST: {
       const {id, timestamp, title, category, author, body} = action
-      const post = {id, timestamp, title, category, author, body}
+      const post = {
+        id,
+        timestamp,
+        title,
+        category,
+        author,
+        body,
+        commentCount: 0,
+        voteScore: 1
+      }
       let newState = {...state}
       newState[post.id] = post
       return newState
@@ -72,12 +81,14 @@ function posts (state = {}, action) {
       const {comment} = action
       let newState = {...state}
       newState[comment.parentId].comments[comment.id] = comment
+      newState[comment.parentId].commentCount++
       return newState
     }
     case REMOVE_COMMENT: {
       const {id, parentId} = action
       let newState = {...state}
       delete newState[parentId].comments[id]
+      newState[parentId].commentCount--
       return newState
     }
     case VOTE_UP_POST: {
