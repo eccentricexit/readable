@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { editPost } from '../actions'
-import { updatePost as updatePostApi } from '../utils/api'
+import { editComment } from '../actions'
+import { updateComment as updateCommentApi } from '../utils/api'
 import Modal from 'react-bootstrap/lib/Modal'
 import Button from 'react-bootstrap/lib/Button'
 import Form from 'react-bootstrap/lib/Form'
@@ -10,38 +10,34 @@ import FormControl from 'react-bootstrap/lib/FormControl'
 import ControlLabel from 'react-bootstrap/lib/ControlLabel'
 import Col from 'react-bootstrap/lib/Col'
 
-class EditPostModal extends Component {
+class EditCommentModal extends Component {
   state = {
-    title:'',
-    body:''
+    comment:{}
   }
 
   onSaveEditClick = (e) => {
     e.preventDefault()
-    const {title,body} = this.state
-    const {updatePost,closeClick} = this.props
-    const {category,author,id} = this.props.post    
+    const {comment} = this.state
+    const {updateComment,closeClick} = this.props
+    const {id,body} = comment
 
-    const newPost = {
+    const newComment = {
       id,
       timestamp: Date.now(),
-      category,
-      title,
-      author,
       body
-    }
+    }    
 
-    updatePostApi(newPost)
-    updatePost(newPost)
+    updateCommentApi(newComment)
+    updateComment(newComment)
     closeClick()
   }
 
-  updateTitle(title){
-    this.setState({title})
-  }
-
   updateBody(body){
-    this.setState({body})
+    this.setState((state) => {
+      let newState = {...state}
+      newState.comment.body = body
+      return newState
+    })
   }
 
   componentDidMount() {
@@ -51,17 +47,16 @@ class EditPostModal extends Component {
     this.props.onRef(undefined)
   }
 
-  updateStateWithPost(post){
-    const {title,body} = post ? post : ''
-
+  updateStateWithComment(comment){
+    const {body} = comment ? comment : ''
     this.setState({
-      title,
-      body
+      comment
     })
   }
 
   render() {
-    const {isOpen,closeClick,post} = this.props
+    const {isOpen,closeClick} = this.props
+    const {comment} = this.state
 
     return (
       <Modal show={isOpen} onHide={closeClick}>
@@ -70,19 +65,6 @@ class EditPostModal extends Component {
         </Modal.Header>
         <Modal.Body>
         <Form horizontal>
-          <FormGroup controlId="formHorizontalTitle">
-            <Col componentClass={ControlLabel} sm={2}>
-              Title
-            </Col>
-            <Col sm={10}>
-              <FormControl
-                type="text"
-                defaultValue={post && post.title}
-                placeholder="Ground Control To Major Tom..."
-                onChange={(event) => this.updateTitle(event.target.value)}/>
-            </Col>
-          </FormGroup>
-
           <FormGroup controlId="formControlsTextarea">
             <Col componentClass={ControlLabel} sm={2}>
               Body
@@ -90,9 +72,9 @@ class EditPostModal extends Component {
             <Col sm={10}>
               <FormControl
                 type="text"
-                defaultValue={post && post.body}
+                defaultValue={comment && comment.body}
                 componentClass="textarea"
-                placeholder="This is Major Tom to ground control..."
+                placeholder="I actually think that..."
                 onChange={(event) => this.updateBody(event.target.value)}/>
             </Col>
           </FormGroup>
@@ -114,16 +96,16 @@ class EditPostModal extends Component {
 
 function mapDispatchToProps (dispatch) {
   return {
-    updatePost: (data) => dispatch(editPost(data))
+    updateComment: (data) => dispatch(editComment(data))
   }
 }
 
-function mapStateToProps ({categories}){
-  return {categories}
+function mapStateToProps ({posts}){
+  return {posts}
 }
 
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(EditPostModal)
+)(EditCommentModal)

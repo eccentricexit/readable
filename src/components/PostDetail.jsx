@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { default as UUID } from "node-uuid"
 import { editPost, addComment } from '../actions'
 import { connect } from 'react-redux'
+import EditCommentModal from './EditCommentModal'
 import Button from 'react-bootstrap/lib/Button'
 import ListGroup from 'react-bootstrap/lib/ListGroup'
 import ListGroupItem from 'react-bootstrap/lib/ListGroupItem'
@@ -9,7 +10,7 @@ import FormControl from 'react-bootstrap/lib/FormControl'
 import ControlLabel from 'react-bootstrap/lib/ControlLabel'
 import Form from 'react-bootstrap/lib/Form'
 import ListItem from './ListItem'
-import PostModal from './PostModal'
+import EditPostModal from './EditPostModal'
 import Comment from './Comment'
 import {
   addComment as addCommentApi,
@@ -18,7 +19,8 @@ import {
 
 class PostDetail extends Component {
   state = {
-    writePostModalOpen:false,
+    editPostModalOpen:false,
+    editCommentModalOpen:false,
     post:{},
     comment:{
       body: '',
@@ -26,23 +28,33 @@ class PostDetail extends Component {
     }
   }
 
-  openNewPostModal = () => {
+  openEditCommentModal = (comment) => {
     this.setState({
-      writePostModalOpen: true,
-      post:undefined
+      editCommentModalOpen: true,
+      comment
     })
+    console.log('openEditComment',comment)
+    this.editCommentModal.updateStateWithComment(comment)
   }
 
-  closeWritePostModal = () => {
+  closeEditCommentModal = () => {
+    console.info('closeEditCommentModal')
     this.setState({
-      writePostModalOpen: false
+      editCommentModalOpen: false
     })
   }
 
   openEditPostModal = (post) => {
     this.setState({
-      writePostModalOpen: true,
+      editPostModalOpen: true,
       post
+    })
+    this.editPostModal.updateStateWithPost(post)
+  }
+
+  closeEditPostModal = () => {
+    this.setState({
+      editPostModalOpen: false
     })
   }
 
@@ -119,15 +131,24 @@ class PostDetail extends Component {
             </ListGroupItem>
             {comments && comments.map((comment) => (
               <ListGroupItem key={UUID.v4()}>
-                <Comment comment={comment}/>
+                <Comment id={comment.id} parentId={comment.parentId}
+                  onEditClick={this.openEditCommentModal}
+                  closeClick={this.closeEditCommentModal}/>
               </ListGroupItem>
             ))}
           </ListGroup>
         : <h1>404!</h1>}
-        <PostModal
+
+        <EditPostModal
           post={this.state.post}
-          closeClick={this.closeWritePostModal}
-          isOpen={this.state.writePostModalOpen}/>
+          closeClick={this.closeEditPostModal}
+          isOpen={this.state.editPostModalOpen}
+          onRef={ref => (this.editPostModal = ref)} />
+
+        <EditCommentModal
+          closeClick={this.closeEditCommentModal}
+          isOpen={this.state.editCommentModalOpen}
+          onRef={ref => (this.editCommentModal = ref)} />
       </div>
     )
   }

@@ -1,44 +1,57 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import Button from 'react-bootstrap/lib/Button'
 import Media from 'react-bootstrap/lib/Media'
 import Label from 'react-bootstrap/lib/Label'
+import {
+  removeComment,
+  upVoteComment,
+  downVoteComment
+} from '../actions'
+import {
+  removeComment as removeCommentApi,
+  voteComment as voteApi,
+} from '../utils/api'
 
 class Comment extends Component {
   onEditCommentClick = (e) => {
     e.preventDefault()
-    console.info('onEditCommentClick')
+    const {comment,onEditClick} = this.props
+    onEditClick(comment)
   }
 
   onRemoveCommentClick = (e) => {
     e.preventDefault()
-    console.info('onRemoveCommentClick')
-  }
-
-  onAddCommentClick = (e) => {
-    e.preventDefault()
-    console.info('onAddCommentClick')
+    const {id, remove, parentId} = this.props
+    removeCommentApi(id)
+    remove({id,parentId})
   }
 
   onUpVoteCommentClick = (e) => {
     e.preventDefault()
-    console.info('onUpVoteCommentClick')
+    const {id,parentId,upVote} = this.props
+    voteApi(id,'upVote')
+    upVote({id,parentId})
   }
 
   onDownVoteCommentClick = (e) => {
     e.preventDefault()
-    console.info('onDownVoteCommentClick')
+    const {id,parentId,downVote} = this.props
+    voteApi(id,'downVote')
+    downVote({id,parentId})
   }
 
   render() {
-    const {comment} = this.props
+    const {id,parentId,posts} = this.props
+    const comment = posts[parentId].comments[id]
+
     return (
       <Media>
         <Media.Body>
           <p>
             {comment.author}
-            <small>
-              <Label bsStyle="primary">{comment.score}</Label>
-            </small>
+            <small> - </small>
+            <small><Label>{comment.voteScore}</Label></small>
           </p>
           <h6>{comment.body}</h6>
         </Media.Body>
@@ -69,4 +82,19 @@ class Comment extends Component {
   }
 }
 
-export default Comment
+function mapStateToProps({posts}){
+  return {posts}
+}
+
+function mapDispatchToProps(dispatch){
+  return {
+    remove: (data) => dispatch(removeComment(data)),
+    upVote: (data) => dispatch(upVoteComment(data)),
+    downVote: (data) => dispatch(downVoteComment(data))
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Comment)

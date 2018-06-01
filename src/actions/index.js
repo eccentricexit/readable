@@ -85,6 +85,22 @@ export function addComment (comment){
   }
 }
 
+export function upVoteComment ({id,parentId}){  
+  return {
+    type: VOTE_UP_COMMENT,
+    id,
+    parentId
+  }
+}
+
+export function downVoteComment ({id,parentId}){
+  return {
+    type: VOTE_DOWN_COMMENT,
+    id,
+    parentId
+  }
+}
+
 export function editComment (comment){
   return {
     type: EDIT_COMMENT,
@@ -92,9 +108,10 @@ export function editComment (comment){
   }
 }
 
-export function removeComment (id){
+export function removeComment ({id,parentId}){
   return {
     type: REMOVE_COMMENT,
-    id
+    id,
+    parentId
   }
 }

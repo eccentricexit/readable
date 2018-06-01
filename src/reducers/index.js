@@ -6,9 +6,12 @@ import {
   EDIT_POST,
   ADD_COMMENT,
   ADD_COMMENTS,
+  REMOVE_COMMENT,
   VOTE_UP_POST,
   VOTE_DOWN_POST,
-  REMOVE_POST
+  REMOVE_POST,
+  VOTE_UP_COMMENT,
+  VOTE_DOWN_COMMENT
 } from '../actions'
 
 function categories (state = [], action) {
@@ -29,7 +32,7 @@ function posts (state = {}, action) {
       const {posts} = action
       let newState = {...state}
       posts.map(post => {
-        return newState[post.id] = post
+        newState[post.id] = post
       })
       return newState
     }
@@ -61,8 +64,7 @@ function posts (state = {}, action) {
       let newState = {...state}
       newState[id].comments = {}
       comments.map((comment) => {
-        newState[id].comments = comments
-        return comment
+        newState[id].comments[comment.id] = comment
       })
       return newState
     }
@@ -70,6 +72,12 @@ function posts (state = {}, action) {
       const {comment} = action
       let newState = {...state}
       newState[comment.parentId].comments[comment.id] = comment
+      return newState
+    }
+    case REMOVE_COMMENT:{
+      const {id,parentId} = action
+      let newState = {...state}
+      delete newState[parentId].comments[id]
       return newState
     }
     case VOTE_UP_POST:{
@@ -82,6 +90,18 @@ function posts (state = {}, action) {
       const {id} = action
       let newState = {...state}
       newState[id].voteScore--
+      return newState
+    }
+    case VOTE_UP_COMMENT:{
+      const {id,parentId} = action
+      let newState = {...state}
+      newState[parentId].comments[id].voteScore++
+      return newState
+    }
+    case VOTE_DOWN_COMMENT:{
+      const {id,parentId} = action      
+      let newState = {...state}
+      newState[parentId].comments[id].voteScore--
       return newState
     }
     default:

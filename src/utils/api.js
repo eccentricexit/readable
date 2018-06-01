@@ -54,6 +54,17 @@ export const updatePost = (post) => {
   )
 }
 
+export const updateComment = (comment) => {
+  const { timestamp, body } = comment
+  fetch(`${api}/comments/${comment.id}`, {
+    method: 'PUT',
+    headers,
+    body: JSON.stringify({timestamp,body})
+  }).then(res =>
+    res.text()
+  )
+}
+
 export const votePost = (id,option) => {
   fetch(`${api}/posts/${id}`, {
     method: 'POST',
@@ -80,6 +91,25 @@ export const addComment = (comment) => {
     method: 'POST',
     headers,
     body: JSON.stringify({id,timestamp,body,author,parentId})
+  }).then(res => {
+    res.json()
+  })
+}
+
+export const removeComment = (id) => {
+  fetch(`${api}/comments/${id}`, {
+    method: 'DELETE',
+    headers    
+  }).then(res => {
+    res.json()
+  })
+}
+
+export const voteComment = (id,option) => {
+  fetch(`${api}/comments/${id}`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({option})
   }).then(res => {
     res.json()
   })
