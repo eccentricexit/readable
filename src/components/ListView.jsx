@@ -46,7 +46,7 @@ class ListView extends Component {
     const postsObj = this.props.posts
     const posts = Object.keys(postsObj).map((id) => {
       return postsObj[id]
-    })
+    }).filter((post) => !post.deleted)
 
     return (
       <div>
