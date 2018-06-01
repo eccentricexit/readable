@@ -33,7 +33,7 @@ class ListItem extends Component {
 
   render() {
     const {id,onEditClick} = this.props
-    const post = this.props.posts[id]    
+    const post = this.props.posts[id]
 
     return (
       <div>
