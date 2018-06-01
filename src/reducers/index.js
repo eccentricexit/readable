@@ -32,7 +32,7 @@ function posts (state = {}, action) {
       const {posts} = action
       let newState = {...state}
       posts.map(post => {
-        newState[post.id] = post
+        return newState[post.id] = post
       })
       return newState
     }
@@ -64,7 +64,7 @@ function posts (state = {}, action) {
       let newState = {...state}
       newState[id].comments = {}
       comments.map((comment) => {
-        newState[id].comments[comment.id] = comment
+        return newState[id].comments[comment.id] = comment
       })
       return newState
     }
@@ -99,7 +99,7 @@ function posts (state = {}, action) {
       return newState
     }
     case VOTE_DOWN_COMMENT:{
-      const {id,parentId} = action      
+      const {id,parentId} = action
       let newState = {...state}
       newState[parentId].comments[id].voteScore--
       return newState

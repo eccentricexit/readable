@@ -26,13 +26,14 @@ class ListItem extends Component {
 
   remove = (e) => {
     e.preventDefault()
-    const {id,remove} = this.props
+    const {id,remove,removeCallback} = this.props
     remove(id)
     removeApi(id)
+    removeCallback && removeCallback()
   }
 
   render() {
-    const {id,onEditClick} = this.props    
+    const {id,onEditClick} = this.props
     const post = this.props.posts[id]
 
     return (

@@ -25,7 +25,7 @@ class EditCommentModal extends Component {
       id,
       timestamp: Date.now(),
       body
-    }    
+    }
 
     updateCommentApi(newComment)
     updateComment(newComment)
@@ -47,8 +47,7 @@ class EditCommentModal extends Component {
     this.props.onRef(undefined)
   }
 
-  updateStateWithComment(comment){
-    const {body} = comment ? comment : ''
+  updateStateWithComment(comment){    
     this.setState({
       comment
     })

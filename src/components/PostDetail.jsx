@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { default as UUID } from "node-uuid"
 import { editPost, addComment } from '../actions'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom';
 import EditCommentModal from './EditCommentModal'
 import Button from 'react-bootstrap/lib/Button'
 import ListGroup from 'react-bootstrap/lib/ListGroup'
@@ -33,12 +34,10 @@ class PostDetail extends Component {
       editCommentModalOpen: true,
       comment
     })
-    console.log('openEditComment',comment)
     this.editCommentModal.updateStateWithComment(comment)
   }
 
   closeEditCommentModal = () => {
-    console.info('closeEditCommentModal')
     this.setState({
       editCommentModalOpen: false
     })
@@ -95,6 +94,10 @@ class PostDetail extends Component {
     })
   }
 
+  removeCallback = () => {    
+    this.props.history.push('/');
+  }
+
   render() {
     const {id,posts} = this.props
     const post = posts[id]
@@ -108,7 +111,10 @@ class PostDetail extends Component {
       {post
         ? <ListGroup>
             <ListGroupItem key={id+'header'}>
-              <ListItem id={id} onEditClick={this.openEditPostModal}/>
+              <ListItem
+                id={id}
+                onEditClick={this.openEditPostModal}
+                removeCallback={this.removeCallback}/>
             </ListGroupItem>
             <ListGroupItem key={id+'body'}>
               <p>{post.body}</p>
@@ -166,7 +172,7 @@ function mapStateToProps ({posts}) {
   return {posts}
 }
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(PostDetail)
+)(PostDetail))
