@@ -9,6 +9,7 @@
 ![3](https://raw.githubusercontent.com/mtsalenc/readable/master/screenshots/3.png)
 ![4](https://raw.githubusercontent.com/mtsalenc/readable/master/screenshots/4.png)
 ![5](https://raw.githubusercontent.com/mtsalenc/readable/master/screenshots/5.png)
+![1](https://raw.githubusercontent.com/mtsalenc/readable/master/screenshots/1.png)
 
 ## Requirements
 
