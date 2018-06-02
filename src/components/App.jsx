@@ -20,10 +20,12 @@ class App extends Component {
       loadingPosts:true
     })
 
+    // Fetch all categories from api and store in redux store
     getCategories().then((categories) => {
       addAllCategories(categories)
     })
 
+    // Fetch all posts from api and store in redux store
     getPosts()
     .then((posts) => {
       addAllPosts(posts)
@@ -31,6 +33,7 @@ class App extends Component {
     })
     .then((posts) => {
       posts.map((post) => {
+        // Fetch the post's comments from api and store in redux store
         getComments(post.id)
         .then((comments) => {
           addAllComments({

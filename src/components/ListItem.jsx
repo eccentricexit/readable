@@ -29,6 +29,9 @@ class ListItem extends Component {
     const {id,remove,removeCallback} = this.props
     remove(id)
     removeApi(id)
+
+    // Callback to execute parent code if needed.
+    // This is used to redirect the user to root when deleting from PostDetail
     removeCallback && removeCallback()
   }
 
