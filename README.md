@@ -2,6 +2,7 @@
 
 > Simple react app demonstrating router and redux usage.
 
+CRUD react app built to demonstrate and redux store and react router v4. It is a reddit-like clone that allows the user to publish posts, comments and a voting mechanism.
 
 ## Screenshots
 ![1](https://raw.githubusercontent.com/mtsalenc/readable/master/screenshots/1.png)
