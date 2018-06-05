@@ -16,7 +16,9 @@ import {
 class Comment extends Component {
   onEditCommentClick = (e) => {
     e.preventDefault()
-    const {comment,onEditClick} = this.props
+    const {id,parentId,posts,onEditClick} = this.props
+    const comment = posts[parentId].comments[id]
+
     onEditClick(comment)
   }
 
