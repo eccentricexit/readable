@@ -28,6 +28,10 @@ npm install
 npm start
 ```
 
+## Contribute
+
+Contributions welcome.
+Note: If editing the README, please conform to the standard-readme specification.
 
 ## License
 
