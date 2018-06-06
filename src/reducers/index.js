@@ -12,7 +12,7 @@ import {
   REMOVE_POST,
   VOTE_UP_COMMENT,
   VOTE_DOWN_COMMENT
-} from '../actions'
+} from '../actions/types'
 
 function categories (state = [], action) {
   switch (action.type) {
