@@ -29,7 +29,7 @@ class NewPostModal extends Component {
   handleSubmit = (e) => {
     e.preventDefault()
     const {title, author, body, category} = this.state
-    const {publishPost, closeClick} = this.props
+    const {addPost, closeClick} = this.props
 
     const post = {
       id: Math.random().toString(36).substr(-8),
@@ -46,24 +46,13 @@ class NewPostModal extends Component {
     }
 
     addPostApi(post)
-    publishPost(post)
+    addPost(post)
     closeClick()
   }
 
 
   categorySelected(category){
-    return category && category.trim().length()>0
-  }
-
-  markInvalidInputs(post){
-    this.setState({
-      validation:{
-        title:false,
-        author:false,
-        category:false,
-        body:false
-      }
-    })
+    return category && category.length>0
   }
 
   updateTitle(title){
@@ -81,7 +70,7 @@ class NewPostModal extends Component {
   onCategorySelect = (category) => {
     this.setState({
       category,
-      categoryWarning:true
+      categoryWarning:false
     })
   }
 
@@ -187,17 +176,11 @@ class NewPostModal extends Component {
   }
 }
 
-function mapDispatchToProps (dispatch) {
-  return {
-    publishPost: (data) => dispatch(addPost(data))
-  }
-}
-
 function mapStateToProps ({categories}){
   return {categories}
 }
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  {addPost}
 )(NewPostModal)

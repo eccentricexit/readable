@@ -24,23 +24,23 @@ class Comment extends Component {
 
   onRemoveCommentClick = (e) => {
     e.preventDefault()
-    const {id, remove, parentId} = this.props
+    const {id, removeComment, parentId} = this.props
     removeCommentApi(id)
-    remove({id,parentId})
+    removeComment({id,parentId})
   }
 
   onUpVoteCommentClick = (e) => {
     e.preventDefault()
-    const {id,parentId,upVote} = this.props
+    const {id,parentId,upVoteComment} = this.props
     voteApi(id,'upVote')
-    upVote({id,parentId})
+    upVoteComment({id,parentId})
   }
 
   onDownVoteCommentClick = (e) => {
     e.preventDefault()
-    const {id,parentId,downVote} = this.props
+    const {id,parentId,downVoteComment} = this.props
     voteApi(id,'downVote')
-    downVote({id,parentId})
+    downVoteComment({id,parentId})
   }
 
   render() {
@@ -88,15 +88,7 @@ function mapStateToProps({posts}){
   return {posts}
 }
 
-function mapDispatchToProps(dispatch){
-  return {
-    remove: (data) => dispatch(removeComment(data)),
-    upVote: (data) => dispatch(upVoteComment(data)),
-    downVote: (data) => dispatch(downVoteComment(data))
-  }
-}
-
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  {removeComment,upVoteComment,downVoteComment}
 )(Comment)

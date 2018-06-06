@@ -14,7 +14,7 @@ class App extends Component {
   }
 
   componentDidMount(){
-    const {addAllCategories, addAllPosts, addAllComments} = this.props
+    const {addCategories, addPosts, addComments} = this.props
 
     this.setState({
       loadingPosts:true
@@ -22,13 +22,13 @@ class App extends Component {
 
     // Fetch all categories from api and store in redux store
     getCategories().then((categories) => {
-      addAllCategories(categories)
+      addCategories(categories)
     })
 
     // Fetch all posts from api and store in redux store
     getPosts()
     .then((posts) => {
-      addAllPosts(posts)
+      addPosts(posts)
       return posts
     })
     .then((posts) => {
@@ -36,7 +36,7 @@ class App extends Component {
         // Fetch the post's comments from api and store in redux store
         getComments(post.id)
         .then((comments) => {
-          addAllComments({
+          addComments({
             id: post.id,
             comments
           })
@@ -95,15 +95,7 @@ function mapStateToProps ({ categories, posts }) {
   return { categories, posts }
 }
 
-function mapDispatchToProps (dispatch) {
-  return {
-    addAllCategories: (data) => dispatch(addCategories(data)),
-    addAllPosts: (data) => dispatch(addPosts(data)),
-    addAllComments: (data) => dispatch(addComments(data))
-  }
-}
-
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  {addCategories,addPosts,addComments}
 )(App)

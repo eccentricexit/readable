@@ -12,22 +12,22 @@ import {
 class ListItem extends Component {
   voteUp = (e) => {
     e.preventDefault()
-    const {id,upVote} = this.props
-    upVote(id)
+    const {id,voteUpPost} = this.props
+    voteUpPost(id)
     voteApi(id,'upVote')
   }
 
   voteDown = (e) => {
     e.preventDefault()
-    const {id,downVote} = this.props
-    downVote(id)
+    const {id,voteDownPost} = this.props
+    voteDownPost(id)
     voteApi(id,'downVote')
   }
 
   remove = (e) => {
     e.preventDefault()
-    const {id,remove,removeCallback} = this.props
-    remove(id)
+    const {id,removePost,removeCallback} = this.props
+    removePost(id)
     removeApi(id)
 
     // Callback to execute parent code if needed.
@@ -94,5 +94,5 @@ function mapStateToProps({posts}){
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  {voteUpPost,voteDownPost,removePost}
 )(ListItem)

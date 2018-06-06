@@ -19,8 +19,8 @@ class EditPostModal extends Component {
   onSaveEditClick = (e) => {
     e.preventDefault()
     const {title,body} = this.state
-    const {updatePost,closeClick} = this.props
-    const {category,author,id} = this.props.post    
+    const {editPost,closeClick} = this.props
+    const {category,author,id} = this.props.post
 
     const newPost = {
       id,
@@ -32,7 +32,7 @@ class EditPostModal extends Component {
     }
 
     updatePostApi(newPost)
-    updatePost(newPost)
+    editPost(newPost)
     closeClick()
   }
 
@@ -112,12 +112,6 @@ class EditPostModal extends Component {
   }
 }
 
-function mapDispatchToProps (dispatch) {
-  return {
-    updatePost: (data) => dispatch(editPost(data))
-  }
-}
-
 function mapStateToProps ({categories}){
   return {categories}
 }
@@ -125,5 +119,5 @@ function mapStateToProps ({categories}){
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  {editPost}
 )(EditPostModal)

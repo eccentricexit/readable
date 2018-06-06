@@ -18,7 +18,7 @@ class EditCommentModal extends Component {
   onSaveEditClick = (e) => {
     e.preventDefault()
     const {comment} = this.state
-    const {updateComment,closeClick} = this.props
+    const {editComment,closeClick} = this.props
     const {id,body} = comment
 
     const newComment = {
@@ -28,7 +28,7 @@ class EditCommentModal extends Component {
     }
 
     updateCommentApi(newComment)
-    updateComment(newComment)
+    editComment(newComment)
     closeClick()
   }
 
@@ -47,7 +47,7 @@ class EditCommentModal extends Component {
     this.props.onRef(undefined)
   }
 
-  updateStateWithComment(comment){    
+  updateStateWithComment(comment){
     this.setState({
       comment
     })
@@ -93,18 +93,11 @@ class EditCommentModal extends Component {
   }
 }
 
-function mapDispatchToProps (dispatch) {
-  return {
-    updateComment: (data) => dispatch(editComment(data))
-  }
-}
-
 function mapStateToProps ({posts}){
   return {posts}
 }
 
-
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  {editComment}
 )(EditCommentModal)

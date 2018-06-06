@@ -60,7 +60,7 @@ class PostDetailContainer extends Component {
   onAddCommentClick = (e) => {
     e.preventDefault()
     let {comment} = this.state
-    const {updatePost,addCommentState,id,post} = this.props
+    const {editPost,addComment,id,post} = this.props
     comment = {
       ...comment,
       id: UUID.v4(),
@@ -73,9 +73,9 @@ class PostDetailContainer extends Component {
     newPost.commentCount++
 
     updatePostApi(newPost)
-    updatePost(newPost)
+    editPost(newPost)
     addCommentApi(comment)
-    addCommentState(comment)
+    addComment(comment)
   }
 
   updateNewCommentAuthor = (author) => {
@@ -182,19 +182,11 @@ const PostDetail = (props) =>
     ))}
   </ListGroup>
 
-
-function mapDispatchToProps (dispatch) {
-  return {
-    updatePost: (data) => dispatch(editPost(data)),
-    addCommentState: (data) => dispatch(addComment(data))
-  }
-}
-
 function mapStateToProps ({posts}) {
   return {posts}
 }
 
 export default withRouter(connect(
   mapStateToProps,
-  mapDispatchToProps
+  {editPost,addComment}
 )(PostDetailContainer))
