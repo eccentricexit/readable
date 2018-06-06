@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { default as UUID } from "node-uuid"
 import { editPost, addComment } from '../actions'
 import { connect } from 'react-redux'
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import EditCommentModal from './EditCommentModal'
 import Button from 'react-bootstrap/lib/Button'
 import ListGroup from 'react-bootstrap/lib/ListGroup'
@@ -94,7 +94,7 @@ class PostDetail extends Component {
     })
   }
 
-  removeCallback = () => {    
+  removeCallback = () => {
     this.props.history.push('/');
   }
 
@@ -144,7 +144,11 @@ class PostDetail extends Component {
               </ListGroupItem>
             ))}
           </ListGroup>
-        : <h1>404!</h1>}
+        : (<div className="text-center">
+            <h1>404!</h1>            
+            <a href="/"><h4>Go to home page</h4></a>
+           </div>)
+          }
 
         <EditPostModal
           post={this.state.post}
