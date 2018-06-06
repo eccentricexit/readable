@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
 import { addPost } from '../actions'
 import { addPost as addPostApi } from '../utils/api'
@@ -11,6 +12,9 @@ import Form from 'react-bootstrap/lib/Form'
 import FormGroup from 'react-bootstrap/lib/FormGroup'
 import FormControl from 'react-bootstrap/lib/FormControl'
 import ControlLabel from 'react-bootstrap/lib/ControlLabel'
+import Label from 'react-bootstrap/lib/Label'
+import Overlay from 'react-bootstrap/lib/Overlay'
+import Tooltip from 'react-bootstrap/lib/Tooltip'
 import Col from 'react-bootstrap/lib/Col'
 
 class NewPostModal extends Component {
@@ -18,10 +22,11 @@ class NewPostModal extends Component {
     title:'',
     author:'',
     category:'',
-    body:''
+    body:'',
+    categoryWarning:false
   }
 
-  onAddClick = (e) => {
+  handleSubmit = (e) => {
     e.preventDefault()
     const {title, author, body, category} = this.state
     const {publishPost, closeClick} = this.props
@@ -34,9 +39,31 @@ class NewPostModal extends Component {
       author,
       body
     }
+
+    if(!this.categorySelected(category)){
+      this.setState({categoryWarning:true})
+      return
+    }
+
     addPostApi(post)
     publishPost(post)
     closeClick()
+  }
+
+
+  categorySelected(category){
+    return category && category.trim().length()>0
+  }
+
+  markInvalidInputs(post){
+    this.setState({
+      validation:{
+        title:false,
+        author:false,
+        category:false,
+        body:false
+      }
+    })
   }
 
   updateTitle(title){
@@ -52,7 +79,10 @@ class NewPostModal extends Component {
   }
 
   onCategorySelect = (category) => {
-    this.setState({category})
+    this.setState({
+      category,
+      categoryWarning:true
+    })
   }
 
   componentWillReceiveProps(){
@@ -66,7 +96,7 @@ class NewPostModal extends Component {
 
   render() {
     const {isOpen,closeClick,categories} = this.props
-    const {category} = this.state
+    const {category,categoryWarning} = this.state
 
     return (
       <Modal show={isOpen} onHide={closeClick}>
@@ -74,74 +104,83 @@ class NewPostModal extends Component {
           <Modal.Title>New</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-        <Form horizontal>
-          <FormGroup controlId="formHorizontalTitle">
-            <Col componentClass={ControlLabel} sm={2}>
-              Title
-            </Col>
-            <Col sm={10}>
-              <FormControl
-                type="text"
-                placeholder="Ground Control To Major Tom..."
-                onChange={(event) => this.updateTitle(event.target.value)}/>
-            </Col>
-          </FormGroup>
-          <FormGroup controlId="formHorizontalAuthor">
-            <Col componentClass={ControlLabel} sm={2}>
-              Category: {category}
-            </Col>
-            <Col sm={10}>
-              <ButtonToolbar>
-                <DropdownButton
-                  bsSize="small"
-                  title="Select..."
-                  id="dropdown"
-                >
-                  {categories.map((category) => (
-                    <MenuItem
-                      eventKey={category.name}
-                      key={category.name}
-                      onSelect={this.onCategorySelect}>
-                      {category.name}
-                    </MenuItem>
-                  ))}
-                </DropdownButton>
-              </ButtonToolbar>
-            </Col>
-          </FormGroup>
-          <FormGroup controlId="formHorizontalAuthor">
-            <Col componentClass={ControlLabel} sm={2}>
-              Author
-            </Col>
-            <Col sm={10}>
-              <FormControl
-                type="text"
-                placeholder="Elon Molusk"
-                onChange={(event) => this.updateAuthor(event.target.value)}
-              />
-            </Col>
-          </FormGroup>
-          <FormGroup controlId="formControlsTextarea">
-            <Col componentClass={ControlLabel} sm={2}>
-              Body
-            </Col>
-            <Col sm={10}>
-              <FormControl
-                type="text"
-                componentClass="textarea"
-                placeholder="This is Major Tom to ground control..."
-                onChange={(event) => this.updateBody(event.target.value)}/>
-            </Col>
-          </FormGroup>
-          <FormGroup>
-            <Col smOffset={2} sm={10}>
-              <Button
-                type="submit"
-                bsStyle="primary"
-                onClick={this.onAddClick}>Publish</Button>
-            </Col>
-          </FormGroup>
+          <Form horizontal onSubmit={this.handleSubmit}>
+            <FormGroup controlId="formHorizontalTitle">
+              <Col componentClass={ControlLabel} sm={2}>
+                Title
+              </Col>
+              <Col sm={10}>
+                <FormControl
+                  required
+                  type="text"
+                  placeholder="Ground Control To Major Tom..."
+                  onChange={(event) => this.updateTitle(event.target.value)}/>
+              </Col>
+            </FormGroup>
+            <FormGroup controlId="formHorizontalAuthor">
+              <Col componentClass={ControlLabel} sm={2}>
+                Category: {category}
+              </Col>
+              <Col sm={10}>
+                <ButtonToolbar>
+                  <DropdownButton
+                    ref={dp => {this.target = dp}}
+                    bsSize="small"
+                    title="Select..."
+                    id="dropdown"
+                  >
+                    {categories.map((category) => (
+                      <MenuItem
+                        eventKey={category.name}
+                        key={category.name}
+                        onSelect={this.onCategorySelect}>
+                        {category.name}
+                      </MenuItem>
+                    ))}
+                  </DropdownButton>
+                </ButtonToolbar>
+              </Col>
+            </FormGroup>
+            <FormGroup controlId="formHorizontalAuthor">
+              <Col componentClass={ControlLabel} sm={2}>
+                Author
+              </Col>
+              <Col sm={10}>
+                <FormControl
+                  type="text"
+                  required
+                  placeholder="Elon Molusk"
+                  onChange={(event) => this.updateAuthor(event.target.value)}
+                />
+              </Col>
+            </FormGroup>
+            <FormGroup controlId="formControlsTextarea">
+              <Col componentClass={ControlLabel} sm={2}>
+                Body
+              </Col>
+              <Col sm={10}>
+                <FormControl
+                  type="text"
+                  required
+                  componentClass="textarea"
+                  placeholder="This is Major Tom to ground control..."
+                  onChange={(event) => this.updateBody(event.target.value)}/>
+              </Col>
+            </FormGroup>
+            <FormGroup>
+              <Col smOffset={2} sm={10}>
+                <Button
+                  type="submit"
+                  bsStyle="primary"
+                  >Publish</Button>
+              </Col>
+            </FormGroup>
           </Form>
+          <Overlay
+            target={() => ReactDOM.findDOMNode(this.target)}
+            placement="right" show={categoryWarning}>
+            <Tooltip id="overload-left">Please select a category</Tooltip>
+          </Overlay>
         </Modal.Body>
       </Modal>
     )
