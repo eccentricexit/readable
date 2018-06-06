@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
-import { voteUpPost, voteDownPost, removePost } from '../actions'
+import * as actions from '../actions'
 import Button from 'react-bootstrap/lib/Button'
 import Media from 'react-bootstrap/lib/Media'
 import Label from 'react-bootstrap/lib/Label'
@@ -80,19 +80,11 @@ class ListItem extends Component {
   }
 }
 
-function mapDispatchToProps(dispatch){
-  return {
-    upVote: (data) => dispatch(voteUpPost(data)),
-    downVote: (data) => dispatch(voteDownPost(data)),
-    remove: (data) => dispatch(removePost(data))
-  }
-}
-
 function mapStateToProps({posts}){
   return {posts}
 }
 
 export default connect(
   mapStateToProps,
-  {voteUpPost,voteDownPost,removePost}
+  actions
 )(ListItem)
