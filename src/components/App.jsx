@@ -5,7 +5,7 @@ import { getCategories, getPosts, getComments } from '../utils/api'
 import { addPosts, addCategories, addComments } from '../actions'
 import ListView from './ListView'
 import Navbar from './Navbar'
-import PostDetail from './PostDetail'
+import PostDetailContainer from './PostDetailContainer'
 import '../App.css'
 
 class App extends Component {
@@ -75,7 +75,7 @@ class App extends Component {
                 exact
                 path={'/'+category.path+'/:id'}
                 render={({match}) => (
-                  <PostDetail id={match.params.id}/>
+                  <PostDetailContainer id={match.params.id}/>
               )}/>
             </Switch>
           ))}

@@ -18,7 +18,7 @@ import {
   updatePost as updatePostApi
 } from '../utils/api'
 
-class PostDetail extends Component {
+class PostDetailContainer extends Component {
   state = {
     editPostModalOpen:false,
     editCommentModalOpen:false,
@@ -78,7 +78,7 @@ class PostDetail extends Component {
     addCommentState(comment)
   }
 
-  updateNewCommentAuthor(author){
+  updateNewCommentAuthor = (author) => {
     this.setState((state) => {
       let newState = {...state}
       newState.comment.author = author
@@ -86,7 +86,7 @@ class PostDetail extends Component {
     })
   }
 
-  updateNewCommentBody(body){
+  updateNewCommentBody = (body) => {
     this.setState((state) => {
       let newState = {...state}
       newState.comment.body = body
@@ -109,46 +109,20 @@ class PostDetail extends Component {
     return (
       <div>
       {post
-        ? <ListGroup>
-            <ListGroupItem key={id+'header'}>
-              <ListItem
-                id={id}
-                onEditClick={this.openEditPostModal}
-                removeCallback={this.removeCallback}/>
-            </ListGroupItem>
-            <ListGroupItem key={id+'body'}>
-              <p>{post.body}</p>
-            </ListGroupItem>
-            <ListGroupItem key={id+'comments'}>
-              <Form>
-                <ControlLabel>Author</ControlLabel>
-                <FormControl
-                  type="text"
-                  placeholder="Elon Molusk"
-                  onChange={(event) => this.updateNewCommentAuthor(event.target.value)}
-                />
-                <ControlLabel>Comments</ControlLabel>
-                <FormControl
-                  componentClass="textarea"
-                  placeholder="What are your thoughts?"
-                  onChange={(event) => this.updateNewCommentBody(event.target.value)}/>
-                  <br />
-                <Button onClick={this.onAddCommentClick} bsStyle="primary">Add Comment</Button>
-              </Form>
-            </ListGroupItem>
-            {comments && comments.map((comment) => (
-              <ListGroupItem key={UUID.v4()}>
-                <Comment id={comment.id} parentId={comment.parentId}
-                  onEditClick={this.openEditCommentModal}
-                  closeClick={this.closeEditCommentModal}/>
-              </ListGroupItem>
-            ))}
-          </ListGroup>
-        : (<div className="text-center">
-            <h1>404!</h1>            
-            <a href="/"><h4>Go to home page</h4></a>
-           </div>)
-          }
+        ? <PostDetail
+            id={id}
+            post={post}
+            comments={comments}
+            updateNewCommentAuthor={this.updateNewCommentAuthor}
+            updateNewCommentBody={this.updateNewCommentBody}
+            onAddCommentClick={this.onAddCommentClick}
+            openEditPostModal={this.openEditPostModal}
+            openEditCommentModal={this.openEditCommentModal}
+            removeCallback={this.removeCallback}
+            closeEditCommentModal={this.closeEditCommentModal}
+            onEditClick={this.onEditClick}/>
+
+        : <FourOhFour />}
 
         <EditPostModal
           post={this.state.post}
@@ -165,6 +139,50 @@ class PostDetail extends Component {
   }
 }
 
+const FourOhFour = (props) =>
+  <div className="text-center">
+    <h1>404!</h1>
+    <a href="/"><h4>Go to home page</h4></a>
+  </div>
+
+const PostDetail = (props) =>
+  <ListGroup>
+    <ListGroupItem key={props.id+'header'}>
+      <ListItem
+        id={props.id}
+        onEditClick={props.openEditPostModal}
+        removeCallback={props.removeCallback}/>
+    </ListGroupItem>
+    <ListGroupItem key={props.id+'body'}>
+      <p>{props.post.body}</p>
+    </ListGroupItem>
+    <ListGroupItem key={props.id+'comments'}>
+      <Form>
+        <ControlLabel>Author</ControlLabel>
+        <FormControl
+          type="text"
+          placeholder="Elon Molusk"
+          onChange={(event) => props.updateNewCommentAuthor(event.target.value)}
+        />
+        <ControlLabel>Comments</ControlLabel>
+        <FormControl
+          componentClass="textarea"
+          placeholder="What are your thoughts?"
+          onChange={(event) => props.updateNewCommentBody(event.target.value)}/>
+          <br />
+        <Button onClick={props.onAddCommentClick} bsStyle="primary">Add Comment</Button>
+      </Form>
+    </ListGroupItem>
+    {props.comments && props.comments.map((comment) => (
+      <ListGroupItem key={UUID.v4()}>
+        <Comment id={comment.id} parentId={comment.parentId}
+          onEditClick={props.openEditCommentModal}
+          closeClick={props.closeEditCommentModal}/>
+      </ListGroupItem>
+    ))}
+  </ListGroup>
+
+
 function mapDispatchToProps (dispatch) {
   return {
     updatePost: (data) => dispatch(editPost(data)),
@@ -179,4 +197,4 @@ function mapStateToProps ({posts}) {
 export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(PostDetail))
+)(PostDetailContainer))
